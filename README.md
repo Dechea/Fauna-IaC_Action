@@ -6,7 +6,7 @@ Manages your Fauna graphql schema, UDFs, indexes, roles, collections & access pr
 
 ## YAML Definition
 
-Add the following snippet to the "step" section of your `main.yml` file:
+Add the following snippet to the "steps" section of your `main.yml` file:
 
 ```yaml
 steps:
