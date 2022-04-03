@@ -10,7 +10,8 @@ Add the following snippet to the "steps" section of your `main.yml` file:
 
 ```yaml
 steps:
-  - uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
+  - name: Run Fauna Migration
+    uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
     with:
       SECRET: '<string>'
       ENV: 'string'
@@ -26,7 +27,7 @@ steps:
 | SECRET (*)            | The key used to access your Fauna database. |
 | ENV (*)               | The environment that will be applied to the database. Supported values: [Dev, Staging, Prod] |
 | DATABASE (*)          | The target database where you want to apply the migration. |
-| DOMAINS (*)           | Array with the repository names of the domains. |
+| DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository> |
 | FAUNA_DOMAIN (*)      | The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.|
 | DEBUG                 | Turn on extra debug information. Default: `false`. |
 
@@ -74,6 +75,26 @@ This pattern needs to be applied as a prefix to your ressources and divided by a
 - Fauna domain databases (e.g. "USR_User" or "USR_SomethingElse") (Optional)
 
 Good to know: If you follow these pattern, it's also relatively easy to have a code coverage report for every domain independently. You can do a code coverage inclusion in every repo for the files that are starting with the prefix of your own domain and then publish it e.g. to sonarcloud.
+
+## Examples
+
+```yaml  
+name: Build and Deploy
+on: [push]
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Fauna Migration
+        uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
+        with:
+          SECRET: $SECRET
+          ENV: 'Staging'
+          DATABASE: 'Staging'
+          PRODUCT_DOMAINS: ['Dechea/USER_Schema','Dechea/INVOICE_Schema']
+          FAUNA_DOMAIN: 'db.fauna.com'
+```
   
 ## How it works
 We have repositories created for every domain. Every repo has the structure defined by [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate). It includes collections, UDFs, Indexes, roles that are related to that domain. 
