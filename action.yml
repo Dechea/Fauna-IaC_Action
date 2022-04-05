@@ -71,10 +71,7 @@ runs:
       run: |
         cd repos
         mkdir -p schema
-        for repo in ${{ fromJSON(inputs.DOMAINS) }};
-          do
-          cat $repo/$repo.gql >> schema/schema.gql
-          ; done
+        for repo in ${{ fromJSON(inputs.DOMAINS) }}; do cat $repo/$repo.gql >> schema/schema.gql; done
         cat schema/schema.gql
         echo "Successfully merge schema files"
       shell: bash
