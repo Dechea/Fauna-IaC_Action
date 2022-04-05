@@ -34,35 +34,35 @@ runs:
       shell: bash
 
     - run: |
-        echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
+        echo "Input parameters: ${{ env.GITHUB_PAT }}"
       shell: bash
 
     - name: Checkout ORC_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/ORC_Schema
-        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
         path: ORC_Schema
 
     - name: Checkout CLS_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/CLS_Schema
-        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
         path: CLS_Schema
 
     - name: Checkout USR_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/USR_Schema
-        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
         path: USR_Schema
 
     - name: Checkout HES_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/HES_Schema
-        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
         path: HES_Schema
 
     - run: ls -lA
