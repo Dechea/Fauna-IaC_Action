@@ -57,7 +57,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: Dechea/USR_Schema
-        ref:${{ inputs.BRANCH }}
+        ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
         path: USR_Schema
 
