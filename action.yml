@@ -30,11 +30,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: ls -lA
-      shell: bash
-
     - run: |
         echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
+        echo "Input array: ${{ fromJSON(inputs.DOMAINS) }}"
       shell: bash
 
     - name: Checkout ORC_Schema
@@ -43,7 +41,7 @@ runs:
         repository: Dechea/ORC_Schema
         ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
-        path: ORC_Schema
+        path: repos/ORC_Schema
 
     - name: Checkout CLS_Schema
       uses: actions/checkout@v3
@@ -51,7 +49,7 @@ runs:
         repository: Dechea/CLS_Schema
         ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
-        path: CLS_Schema
+        path: repos/CLS_Schema
 
     - name: Checkout USR_Schema
       uses: actions/checkout@v3
@@ -59,7 +57,7 @@ runs:
         repository: Dechea/USR_Schema
         ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
-        path: USR_Schema
+        path: repos/USR_Schema
 
     - name: Checkout HES_Schema
       uses: actions/checkout@v3
@@ -67,7 +65,16 @@ runs:
         repository: Dechea/HES_Schema
         ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
-        path: HES_Schema
+        path: repos/HES_Schema
 
-    - run: ls -lA
+    - name: Merge schema files
+      run: |
+        cd repos
+        mkdir -p schema
+        for repo in ${{ fromJSON(inputs.DOMAINS) }};
+          do
+          cat $repo/$repo.gql >> schema/schema.gql
+          ; done
+        cat schema/schema.gql
+        echo "Successfully merge schema files"
       shell: bash
