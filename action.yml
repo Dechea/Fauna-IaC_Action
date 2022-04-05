@@ -16,7 +16,7 @@ inputs:
     required: true
     default: 'Prod'
   DOMAINS:
-    description: 'Array with the repository names of the domains.'
+    description: 'JSON Array with the repository names of the domains.'
     required: true
   FAUNA_DOMAIN:
     description: 'The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.'

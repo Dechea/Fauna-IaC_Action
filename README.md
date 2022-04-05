@@ -17,7 +17,7 @@ steps:
       FAUNA_SECRET: '<string>'
       BRANCH: 'string'
       DATABASE: '<string>'
-      DOMAINS: ['<string>','<string>']
+      DOMAINS: '<string>' # JSON Array
       FAUNA_DOMAIN: 'string'
       # DEBUG: "<boolean>" # Optional
 ```
@@ -95,7 +95,7 @@ jobs:
           FAUNA_SECRET: FAUNA_SECRET
           BRANCH: 'Staging'
           DATABASE: 'Staging'
-          PRODUCT_DOMAINS: ['Dechea/USER_Schema','Dechea/INVOICE_Schema']
+          PRODUCT_DOMAINS: '["Dechea/USER_Schema","Dechea/INVOICE_Schema"]'
           FAUNA_DOMAIN: 'db.fauna.com'
 ```
   
