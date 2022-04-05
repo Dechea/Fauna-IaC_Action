@@ -41,6 +41,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: Dechea/ORC_Schema
+        ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
         path: ORC_Schema
 
@@ -48,6 +49,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: Dechea/CLS_Schema
+        ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
         path: CLS_Schema
 
@@ -55,6 +57,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: Dechea/USR_Schema
+        ref:${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
         path: USR_Schema
 
@@ -62,6 +65,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: Dechea/HES_Schema
+        ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }} 
         path: HES_Schema
 
