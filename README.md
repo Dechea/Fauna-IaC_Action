@@ -25,7 +25,7 @@ steps:
 | Variable              | Usage                                                       |
 | --------------------- | ----------------------------------------------------------- |
 | SECRET (*)            | The key used to access your Fauna database. |
-| BRANCH (*)            | The environment that will be applied to the database. Supported values: [Dev, Staging, Prod] |
+| BRANCH (*)            | The branch that will be fetched from the other repos and deployed to the database. eg. "Develop", "Release", "Master", ... |
 | DATABASE (*)          | The target database where you want to apply the migration. |
 | DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository> |
 | FAUNA_DOMAIN (*)      | The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.|
