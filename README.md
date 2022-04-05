@@ -13,7 +13,8 @@ steps:
   - name: Run Fauna Migration
     uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
     with:
-      SECRET: '<string>'
+      GITHUB_PAT: '<string>'
+      FAUNA_SECRET: '<string>'
       BRANCH: 'string'
       DATABASE: '<string>'
       DOMAINS: ['<string>','<string>']
@@ -24,7 +25,8 @@ steps:
 
 | Variable              | Usage                                                       |
 | --------------------- | ----------------------------------------------------------- |
-| SECRET (*)            | The key used to access your Fauna database. |
+| GITHUB_PAT (*)        | The key used to access your github repos. |
+| FAUNA_SECRET (*)      | The key used to access your Fauna database. |
 | BRANCH (*)            | The branch that will be fetched from the other repos and deployed to the database. eg. "Develop", "Release", "Master", ... |
 | DATABASE (*)          | The target database where you want to apply the migration. |
 | DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository> |
@@ -89,7 +91,8 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
         with:
-          SECRET: $SECRET
+          GITHUB_PAT: GITHUB_PAT
+          FAUNA_SECRET: FAUNA_SECRET
           BRANCH: 'Staging'
           DATABASE: 'Staging'
           PRODUCT_DOMAINS: ['Dechea/USER_Schema','Dechea/INVOICE_Schema']
