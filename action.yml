@@ -1,0 +1,67 @@
+name: 'Fauna Domain - Infrastructure as code'
+description: 'Greet someone'
+inputs:
+  GITHUB_PAT:
+    description: 'The key used to access your github repos.'
+    required: true
+  FAUNA_SECRET:
+    description: 'The key used to access your Fauna database.'
+    required: false
+  BRANCH:
+    description: 'The branch that will be fetched from the other repos and deployed to the database. eg. "Develop", "Release", "Master", ...'
+    required: false
+    default: 'Prod'
+  DATABASE:
+    description: 'The target database where you want to apply the migration.'
+    required: false
+    default: 'Prod'
+  DOMAINS:
+    description: 'Array with the repository names of the domains.'
+    required: false
+  FAUNA_DOMAIN:
+    description: 'The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.'
+    required: false
+    default: 'db.eu.fauna.com'
+  VERBOSE:
+    description: 'Turn on extra debug information.'
+    required: false
+    default: 'false'
+#outputs:
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        path: main
+
+    - name: Checkout ORC_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/ORC_Schema
+        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        path: ORC_Schema
+
+    - name: Checkout CLS_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/CLS_Schema
+        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        path: CLS_Schema
+
+    - name: Checkout USR_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/USR_Schema
+        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        path: USR_Schema
+
+    - name: Checkout HES_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/HES_Schema
+        token: ${{ inputs.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        path: HES_Schema
+
+    - run: ls -lA
+      shell: bash
