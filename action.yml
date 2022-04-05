@@ -6,21 +6,21 @@ inputs:
     required: true
   FAUNA_SECRET:
     description: 'The key used to access your Fauna database.'
-    required: false
+    required: true
   BRANCH:
     description: 'The branch that will be fetched from the other repos and deployed to the database. eg. "Develop", "Release", "Master", ...'
-    required: false
+    required: true
     default: 'Prod'
   DATABASE:
     description: 'The target database where you want to apply the migration.'
-    required: false
+    required: true
     default: 'Prod'
   DOMAINS:
     description: 'Array with the repository names of the domains.'
-    required: false
+    required: true
   FAUNA_DOMAIN:
     description: 'The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.'
-    required: false
+    required: true
     default: 'db.eu.fauna.com'
   VERBOSE:
     description: 'Turn on extra debug information.'
@@ -34,35 +34,35 @@ runs:
       shell: bash
 
     - run: |
-        echo "Input parameters: ${{ env.GITHUB_PAT }}"
+        echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
       shell: bash
 
     - name: Checkout ORC_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/ORC_Schema
-        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ inputs.GITHUB_PAT }} 
         path: ORC_Schema
 
     - name: Checkout CLS_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/CLS_Schema
-        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ inputs.GITHUB_PAT }} 
         path: CLS_Schema
 
     - name: Checkout USR_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/USR_Schema
-        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ inputs.GITHUB_PAT }} 
         path: USR_Schema
 
     - name: Checkout HES_Schema
       uses: actions/checkout@v3
       with:
         repository: Dechea/HES_Schema
-        token: ${{ env.GITHUB_PAT }} # `GH_PAT` is a secret that contains your PAT
+        token: ${{ inputs.GITHUB_PAT }} 
         path: HES_Schema
 
     - run: ls -lA
