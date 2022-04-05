@@ -30,10 +30,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-      with:
-        path: main
+    - run: ls -lA
+      shell: bash
+
+    - run: |
+        echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
+      shell: bash
 
     - name: Checkout ORC_Schema
       uses: actions/checkout@v3
