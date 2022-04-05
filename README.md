@@ -14,7 +14,7 @@ steps:
     uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
     with:
       SECRET: '<string>'
-      ENV: 'string'
+      BRANCH: 'string'
       DATABASE: '<string>'
       DOMAINS: ['<string>','<string>']
       FAUNA_DOMAIN: 'string'
@@ -25,7 +25,7 @@ steps:
 | Variable              | Usage                                                       |
 | --------------------- | ----------------------------------------------------------- |
 | SECRET (*)            | The key used to access your Fauna database. |
-| ENV (*)               | The environment that will be applied to the database. Supported values: [Dev, Staging, Prod] |
+| BRANCH (*)            | The environment that will be applied to the database. Supported values: [Dev, Staging, Prod] |
 | DATABASE (*)          | The target database where you want to apply the migration. |
 | DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository> |
 | FAUNA_DOMAIN (*)      | The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.|
@@ -90,7 +90,7 @@ jobs:
         uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
         with:
           SECRET: $SECRET
-          ENV: 'Staging'
+          BRANCH: 'Staging'
           DATABASE: 'Staging'
           PRODUCT_DOMAINS: ['Dechea/USER_Schema','Dechea/INVOICE_Schema']
           FAUNA_DOMAIN: 'db.fauna.com'
