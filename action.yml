@@ -113,14 +113,6 @@ runs:
 #        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
 #      shell: bash
 
-    - uses: actions/checkout@v2
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-        cache: 'npm'
-        cache-dependency-path: '**/package-lock.json' # THIS PATTERN did the trick for me.
-
     - name: Merge all test files
       run: |
         mkdir faunaTests faunaTests/fauna
@@ -141,6 +133,14 @@ runs:
         done
         echo "Successfully copied necessary files for testing"
       shell: bash
+
+    - uses: actions/checkout@v2
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: 'npm'
+        cache-dependency-path: '**/package-lock.json' # THIS PATTERN did the trick for me.
 
     - name: Use Node.js
       run: |
