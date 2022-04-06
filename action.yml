@@ -112,13 +112,17 @@ runs:
 #      shell: bash
 
     - uses: actions/checkout@v2
-    - name: Use Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
         node-version: '14'
         cache: 'npm'
         cache-dependency-path: '**/package-lock.json' # THIS PATTERN did the trick for me.
-      run: npm install && npm run test
+
+    - name: Use Node.js
+      run: |
+        npm install 
+        npm run test
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.6
