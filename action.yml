@@ -77,7 +77,7 @@ runs:
           echo "repo: ${repoNames[index]}"
           # cat ${repoNames[index]}/${repoNames[index]}.gql >> schema/schema.gql
         done
-        ls -la repos
+        ls -la .
         # cat schema/schema.gql
         echo "Successfully merge schema files"
       shell: bash
