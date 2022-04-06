@@ -35,10 +35,6 @@ runs:
         echo "Input array: ${{ fromJSON(inputs.DOMAINS) }}"
       shell: bash
 
-    - name: Test
-      run: echo DOMAINS_MATRIX
-      shell: bash
-
     - name: Checkout ORC_Schema
       uses: actions/checkout@v3
       with:
