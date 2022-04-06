@@ -37,7 +37,7 @@ runs:
 
     - name: "Convert string to array for domain names"
       run: |
-        echo "DOMAIN_NAMES=$(IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }})" >> $GITHUB_ENV
+        echo "DOMAIN_NAMES=$(echo IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }})" >> $GITHUB_ENV
       shell: bash
 
     - run: |
