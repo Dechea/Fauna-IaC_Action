@@ -36,16 +36,11 @@ runs:
         echo "Input branch: ${{ inputs.BRANCH }}"
       shell: bash
 
-    - name: "Logging paths"
-      run: |
-        ls -lA .github
-      shell: bash
-
     - name: "Convert string to array for domain names"
       run: |
         ls -lA 
-        chmod +x scripts/convert_input_string.sh
-        echo "DOMAINS_MODIFIED=$(scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})" >> GITHUB_ENV
+        chmod +x ${{ github.action_path }}/scripts/convert_input_string.sh
+        echo "DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})" >> GITHUB_ENV
       shell: bash
 
     - run: |
