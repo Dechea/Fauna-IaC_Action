@@ -92,19 +92,19 @@ runs:
         token: ${{ inputs.GITHUB_PAT }}
         path: repos/HES_Schema
 
-#    - name: Merge schema files
-#      run: |
-#        cd repos
-#        mkdir -p schema
-#        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-#        for index in "${!repoNames[@]}"
-#        do
-#          echo "repo: ${repoNames[index]}"
-#          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-#        done
-#        cat schema/schema.gql
-#        echo "Successfully merge schema files"
-#      shell: bash
+    - name: Merge schema files
+      run: |
+        cd repos
+        mkdir -p schema
+        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+        for index in "${!repoNames[@]}"
+        do
+          echo "repo: ${repoNames[index]}"
+          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+        done
+        cat schema/schema.gql
+        echo "Successfully merge schema files"
+      shell: bash
 #
 #    - name: Upload Schema File
 #      run: |
