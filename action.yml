@@ -78,10 +78,10 @@ runs:
           # cat ${repoNames[index]}/${repoNames[index]}.gql >> schema/schema.gql
         done
         ls -la .
-        ls -la USR_Schema
-        ls -la ORC_Schema
-        ls -la CLS_Schema
-        ls -la HES_Schema
+        ls -la usr_schema
+        ls -la orc_schema
+        ls -la cls_schema
+        ls -la hes_schema
         # cat schema/schema.gql
         echo "Successfully merge schema files"
       shell: bash
