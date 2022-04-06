@@ -38,8 +38,7 @@ runs:
 
     - name: "Logging paths"
       run: |
-        cd .github
-        ls -lA
+        cd .github && ls -lA
       shell: bash
 
     - uses: actions/checkout@v3
