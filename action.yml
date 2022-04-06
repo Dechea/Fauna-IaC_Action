@@ -36,77 +36,90 @@ runs:
         echo "Input branch: ${{ inputs.BRANCH }}"
       shell: bash
 
-    - name: "Convert string to array for domain names"
-      run: |
-        chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
-        echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
-      shell: bash
+#    - name: "Convert string to array for domain names"
+#      run: |
+#        chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
+#        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
+#        echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
+#      shell: bash
+#
+#    - run: |
+#        echo "Domain Names: $DOMAINS_MODIFIED"
+#      shell: bash
+#
+#    - run: |
+#        echo "Domain Names: ${{ env.DOMAINS_MODIFIED }}"
+#      shell: bash
+#
+#    - uses: actions/checkout@v3
+#    - name: Checkout all domain repos
+#      uses: vweevers/multi-checkout-action@v1
+#      with:
+#        token: ${{ inputs.GITHUB_PAT }}
+#        repositories: |
+#          ${{ env.DOMAINS_MODIFIED }}"
+#        path: repos
 
-    - run: |
-        echo "Domain Names: $DOMAINS_MODIFIED"
-      shell: bash
-
-    - run: |
-        echo "Domain Names: ${{ env.DOMAINS_MODIFIED }}"
-      shell: bash
-
-    - uses: actions/checkout@v3
-    - name: Checkout all domain repos
-      uses: vweevers/multi-checkout-action@v1
+    - name: Checkout ORC_Schema
+      uses: actions/checkout@v3
       with:
+        repository: Dechea/ORC_Schema
+        ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }}
-        repositories: |
-          ${{ env.DOMAINS_MODIFIED }}"
-        path: repos
-#
-#    - name: Checkout ORC_Schema
-#      uses: actions/checkout@v3
-#      with:
-#        repository: Dechea/ORC_Schema
-#        ref: ${{ inputs.BRANCH }}
-#        token: ${{ inputs.GITHUB_PAT }}
-#        path: repos/ORC_Schema
-#
-#    - name: Checkout CLS_Schema
-#      uses: actions/checkout@v3
-#      with:
-#        repository: Dechea/CLS_Schema
-#        ref: ${{ inputs.BRANCH }}
-#        token: ${{ inputs.GITHUB_PAT }}
-#        path: repos/CLS_Schema
-#
-#    - name: Checkout USR_Schema
-#      uses: actions/checkout@v3
-#      with:
-#        repository: Dechea/USR_Schema
-#        ref: ${{ inputs.BRANCH }}
-#        token: ${{ inputs.GITHUB_PAT }}
-#        path: repos/USR_Schema
-#
-#    - name: Checkout HES_Schema
-#      uses: actions/checkout@v3
-#      with:
-#        repository: Dechea/HES_Schema
-#        ref: ${{ inputs.BRANCH }}
-#        token: ${{ inputs.GITHUB_PAT }}
-#        path: repos/HES_Schema
+        path: repos/ORC_Schema
 
-    - name: Merge schema files
-      run: |
-        cd repos
-        mkdir -p schema
-        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-        for index in "${!repoNames[@]}"
-        do
-          echo "repo: ${repoNames[index]}"
-          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-        done
-        cat schema/schema.gql
-        echo "Successfully merge schema files"
-      shell: bash
+    - name: Checkout CLS_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/CLS_Schema
+        ref: ${{ inputs.BRANCH }}
+        token: ${{ inputs.GITHUB_PAT }}
+        path: repos/CLS_Schema
 
-    - name: Upload Schema File
-      run: |
-        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
-      shell: bash
+    - name: Checkout USR_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/USR_Schema
+        ref: ${{ inputs.BRANCH }}
+        token: ${{ inputs.GITHUB_PAT }}
+        path: repos/USR_Schema
+
+    - name: Checkout HES_Schema
+      uses: actions/checkout@v3
+      with:
+        repository: Dechea/HES_Schema
+        ref: ${{ inputs.BRANCH }}
+        token: ${{ inputs.GITHUB_PAT }}
+        path: repos/HES_Schema
+
+#    - name: Merge schema files
+#      run: |
+#        cd repos
+#        mkdir -p schema
+#        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+#        for index in "${!repoNames[@]}"
+#        do
+#          echo "repo: ${repoNames[index]}"
+#          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+#        done
+#        cat schema/schema.gql
+#        echo "Successfully merge schema files"
+#      shell: bash
+#
+#    - name: Upload Schema File
+#      run: |
+#        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
+#      shell: bash
+
+    - name: Run Tests and create coverage files
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+        cache: 'npm'
+        cache-dependency-path: subdir/package-lock.json
+    - run: npm install
+    - run: npm run test
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v1.6
