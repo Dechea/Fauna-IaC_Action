@@ -122,6 +122,7 @@ runs:
     - name: Merge all test files
       run: |
         mkdir faunaTests faunaTests/fauna
+        cd repos
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
         do
