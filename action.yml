@@ -37,13 +37,11 @@ runs:
 
     - name: "Convert string to array for domain names"
       run: |
-        domainNames: IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+        echo "DOMAIN_NAMES=$(IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }})" >> $GITHUB_ENV
       shell: bash
-      env:
-        domainNames: ${domainNames}
 
     - run: |
-        echo "Domain Names: ${{ env.domainName }}"
+        echo "Domain Names: ${{ env.DOMAIN_NAMES }}"
       shell: bash
 
     - name: Checkout ORC_Schema
