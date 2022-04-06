@@ -38,10 +38,8 @@ runs:
 
     - name: "Convert string to array for domain names"
       run: |
-        echo "DOMAINS_MODIFIED=${{ inputs.DOMAINS}}"
-        echo "$DOMAINS_MODIFIED+=,"
-        echo "$DOMAINS_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAINS_MODIFIED)"
-        echo $DOMAINS_MODIFIED >> $GITHUB_ENV
+        chmod +x ./scripts/convert_input_string.sh
+        echo "DOMAINS_MODIFIED=./scripts/convert_input_string.sh" >> GITHUB_ENV
       shell: bash
 
     - run: |
