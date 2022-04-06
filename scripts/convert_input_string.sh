@@ -12,8 +12,8 @@ echo "Received list of domains: $1, $2"
 
 # Convert domain list
 BRANCH=$2
-DOMAINS_MODIFIED=$1
-$DOMAINS_MODIFIED+=,
-$DOMAINS_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAINS_MODIFIED)
+DOMAINS_LIST=$1
+$DOMAIN_LIST+=","
+DOMAIN_LIST_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAIN_LIST)
 
-echo $DOMAINS_MODIFIED
+echo $DOMAIN_LIST_MODIFIED
