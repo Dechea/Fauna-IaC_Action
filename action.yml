@@ -89,3 +89,8 @@ runs:
         cat schema/schema.gql
         echo "Successfully merge schema files"
       shell: bash
+
+    - name: Upload Schema File
+      run: |
+        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
+      shell: bash
