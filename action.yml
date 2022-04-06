@@ -39,7 +39,7 @@ runs:
     - uses: actions/checkout@v3
     - name: "Convert string to array for domain names"
       run: |
-        ls -lA
+        ls -lA .github/
         chmod +x scripts/convert_input_string.sh
         echo "DOMAINS_MODIFIED=$(scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})" >> GITHUB_ENV
       shell: bash
