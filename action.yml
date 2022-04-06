@@ -44,6 +44,10 @@ runs:
       shell: bash
 
     - run: |
+        echo "Domain Names: $DOMAINS_MODIFIED"
+      shell: bash
+
+    - run: |
         echo "Domain Names: ${{ env.DOMAINS_MODIFIED }}"
       shell: bash
 
