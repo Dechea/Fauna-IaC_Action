@@ -1,9 +1,9 @@
 #!/bin/bash
 # Throw error if input is empty
-if [[ $1 -eq 0 ]] ; then
+if [[ -z "$1" ]] ; then
     echo 'ERROR: No domain list received!'
     exit 1
-elif [[ $2 -eq 0 ]] ; then
+elif [[ -z "$2" ]] ; then
     echo 'ERROR: No branch received!'
     exit 1
 fi
