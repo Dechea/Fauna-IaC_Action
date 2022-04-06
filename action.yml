@@ -41,7 +41,7 @@ runs:
         echo "DOMAINS_MODIFIED=${{ inputs.DOMAINS}}"
         echo "$DOMAINS_MODIFIED+=,"
         echo "$DOMAINS_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAINS_MODIFIED)"
-        echo "$DOMAINS_MODIFIED >> $GITHUB_ENV"
+        echo $DOMAINS_MODIFIED >> $GITHUB_ENV
       shell: bash
 
     - run: |
