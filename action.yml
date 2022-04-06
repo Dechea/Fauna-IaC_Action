@@ -123,6 +123,7 @@ runs:
       run: |
         npm install 
         npm run test
+      shell: bash
 
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v1.6
