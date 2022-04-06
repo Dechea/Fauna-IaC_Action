@@ -35,6 +35,17 @@ runs:
         echo "Input array: ${{ inputs.DOMAINS }}"
       shell: bash
 
+    - name: "Convert string to array for domain names"
+      run: |
+        domainNames: IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+      shell: bash
+      env:
+        domainNames: ${domainNames}
+
+    - run: |
+        echo "Domain Names: ${{ env.domainName }}"
+      shell: bash
+
     - name: Checkout ORC_Schema
       uses: actions/checkout@v3
       with:
