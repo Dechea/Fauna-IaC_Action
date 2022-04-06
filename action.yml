@@ -35,6 +35,10 @@ runs:
         echo "Input array: ${{ fromJSON(inputs.DOMAINS) }}"
       shell: bash
 
+    - name: Test
+      run: echo DOMAINS_MATRIX
+      shell: bash
+
     - name: Checkout ORC_Schema
       uses: actions/checkout@v3
       with:
@@ -72,8 +76,10 @@ runs:
         cd repos
         mkdir -p schema
         domains=${{ fromJSON(inputs.DOMAINS) }}
+        echo "Domain: $domains[0]"
         for repo in ${domains[*]}
         do 
+          echo "repo: $repo[0]"
           cat $repo/$repo.gql >> schema/schema.gql
         done
         cat schema/schema.gql
