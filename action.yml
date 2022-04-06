@@ -71,7 +71,7 @@ runs:
       run: |
         cd repos
         mkdir -p schema
-        domains=${{ fromJSON(inputs.DOMAINS.*.name) }}
+        domains=${{ fromJSON(inputs.DOMAINS) }}
         echo "Domain: $domains[0]"
         for repo in ${domains[*]}
         do 
