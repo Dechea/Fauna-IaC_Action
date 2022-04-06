@@ -32,7 +32,7 @@ runs:
   steps:
     - run: |
         echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
-        echo "Input array: ${{ fromJSON(inputs.DOMAINS) }}"
+        echo "Input array: ${{ inputs.DOMAINS }}"
       shell: bash
 
     - name: Checkout ORC_Schema
