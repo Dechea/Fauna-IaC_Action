@@ -36,6 +36,7 @@ runs:
         echo "Input branch: ${{ inputs.BRANCH }}"
       shell: bash
 
+    - uses: actions/checkout@v3
     - name: "Convert string to array for domain names"
       run: |
         ls -lA
