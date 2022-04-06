@@ -33,16 +33,19 @@ runs:
     - run: |
         echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
         echo "Input array: ${{ inputs.DOMAINS }}"
+        echo "Input branch: ${{ inputs.BRANCH }}"
       shell: bash
 
     - name: "Convert string to array for domain names"
       run: |
-        echo "${{ inputs.DOMAINS }}"
-        echo "DOMAIN_NAMES=$(tr , @${{ inputs.BRANCH }}\\n <<< ${{ inputs.DOMAINS }})" >> $GITHUB_ENV
+        DOMAINS_MODIFIED=${{ inputs.DOMAINS}}
+        DOMAINS_MODIFIED+=,
+        DOMAINS_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAINS_MODIFIED)
+        DOMAINS_MODIFIED >> $GITHUB_ENV
       shell: bash
 
     - run: |
-        echo "Domain Names: ${{ env.DOMAIN_NAMES }}"
+        echo "Domain Names: ${{ env.DOMAINS_MODIFIED }}"
       shell: bash
 
     - uses: actions/checkout@v3
@@ -51,7 +54,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{ env.DOMAIN_NAMES }}"
+          ${{ env.DOMAINS_MODIFIED }}"
         path: repos
 #
 #    - name: Checkout ORC_Schema
