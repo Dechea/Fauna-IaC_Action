@@ -121,9 +121,6 @@ runs:
 
     - name: Merge all test files
       run: |
-#        apt-get update -y # update apt
-#        apt-get install -y rsync # install rsync
-#        apt-cache search rsync # check if apt can find rsync
         mkdir faunaTests faunaTests/fauna
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
