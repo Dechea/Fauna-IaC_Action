@@ -94,7 +94,9 @@ runs:
 
     - name: Merge schema files
       run: |
+        ls -lA
         cd repos
+        ls -lA
         mkdir -p schema
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
