@@ -36,22 +36,22 @@ runs:
         echo "Input branch: ${{ inputs.BRANCH }}"
       shell: bash
 
-    # - name: "Convert string to array for domain names"
-    #   id: convert_domains
-    #   run: |
-    #     chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-    #     DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
-    #     echo "domains_modified=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})" >> $GITHUB_ENV
-    #     echo "action_state=yellow" >> $GITHUB_ENV
-    #     echo "Domain Modified: $DOMAINS_MODIFIED"
-    #     # echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
-    #     # echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
-    #   shell: bash
+    - name: "Convert string to array for domain names"
+      id: convert_domains
+      run: |
+        chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
+        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
+        DOMAINS_MODIFIED="${DOMAINS_MODIFIED//'%'/'%25'}"
+        DOMAINS_MODIFIED="${DOMAINS_MODIFIED//$'\n'/'%0A'}"
+        DOMAINS_MODIFIED="${DOMAINS_MODIFIED//$'\r'/'%0D'}"
+        echo "Domain Modified: $DOMAINS_MODIFIED"
+        # echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
+        echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
+      shell: bash
 
-    # - run: |
-    #     echo "Test variable: ${{ env.action_state }}"
-    #     echo "Domain Names: ${{ env.domains_modified }}"
-    #   shell: bash
+    - run: |
+        echo "Domain Names: ${{ steps.covert_domains.outputs.domains_modified }}"
+      shell: bash
 
     - uses: actions/checkout@v3
     - name: Checkout all domain repos
@@ -59,7 +59,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }}
+          ${{ steps.covert_domains.outputs.domains_modified }}
         path: repos
 
     # - name: Checkout ORC_Schema
