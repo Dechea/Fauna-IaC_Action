@@ -45,7 +45,6 @@ runs:
         DOMAINS_MODIFIED="${DOMAINS_MODIFIED//$'\n'/'%0A'}"
         DOMAINS_MODIFIED="${DOMAINS_MODIFIED//$'\r'/'%0D'}"
         echo "Domain Modified: $DOMAINS_MODIFIED"
-        # echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
 
@@ -61,38 +60,6 @@ runs:
         repositories: |
           ${{steps.convert_domains.outputs.domains_modified}}
         path: repos
-
-    # - name: Checkout ORC_Schema
-    #   uses: actions/checkout@v3
-    #   with:
-    #     repository: Dechea/ORC_Schema
-    #     ref: ${{ inputs.BRANCH }}
-    #     token: ${{ inputs.GITHUB_PAT }}
-    #     path: repos/ORC_Schema
-
-    # - name: Checkout CLS_Schema
-    #   uses: actions/checkout@v3
-    #   with:
-    #     repository: Dechea/CLS_Schema
-    #     ref: ${{ inputs.BRANCH }}
-    #     token: ${{ inputs.GITHUB_PAT }}
-    #     path: repos/CLS_Schema
-
-    # - name: Checkout USR_Schema
-    #   uses: actions/checkout@v3
-    #   with:
-    #     repository: Dechea/USR_Schema
-    #     ref: ${{ inputs.BRANCH }}
-    #     token: ${{ inputs.GITHUB_PAT }}
-    #     path: repos/USR_Schema
-
-    # - name: Checkout HES_Schema
-    #   uses: actions/checkout@v3
-    #   with:
-    #     repository: Dechea/HES_Schema
-    #     ref: ${{ inputs.BRANCH }}
-    #     token: ${{ inputs.GITHUB_PAT }}
-    #     path: repos/HES_Schema
 
     - name: Merge schema files
       run: |
