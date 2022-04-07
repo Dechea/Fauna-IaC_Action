@@ -48,7 +48,7 @@ runs:
       shell: bash
 
     - run: |
-        echo "Domain Names: ${{env.domains_modified}}"
+        echo "Domain Names: ${{ env.domains_modified }}"
       shell: bash
 
     - uses: actions/checkout@v3
@@ -57,7 +57,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{env.domains_modified}}
+          ${{ env.domains_modified }}
         path: repos
 
     # - name: Checkout ORC_Schema
