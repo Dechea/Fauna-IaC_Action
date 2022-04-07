@@ -120,8 +120,6 @@ runs:
 
     - name: Create Fauna migration files
       run: |
-        mkdir faunaTests faunaTests/fauna
-        ls -lA
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
         do
