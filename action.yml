@@ -8,7 +8,11 @@ inputs:
     description: 'The key used to access your Fauna database.'
     required: true
   BRANCH:
-    description: 'The branch that will be fetched from the other repos and deployed to the database. eg. "Develop", "Release", "Master", ...'
+    description: 'The branch that will be fetched from the other repos and deployed to the database. Eg. "Develop", "Release", "Master", ...'
+    required: true
+    default: 'Prod'
+  GITHUB_DOMAIN:
+    description: 'The domain/company of your github repository. Eg. Dechea'
     required: true
     default: 'Prod'
   DATABASE:
@@ -19,7 +23,7 @@ inputs:
     description: 'JSON Array with the repository names of the domains.'
     required: true
   FAUNA_DOMAIN:
-    description: 'The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.'
+    description: 'The domain where your database are hosted. Eg. db.fauna.com, db.eu.fauna.com etc.'
     required: true
     default: 'db.eu.fauna.com'
   VERBOSE:
@@ -40,7 +44,8 @@ runs:
       id: convert_domains
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
+        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }} ${{ inputs.GITHUB_DOMAIN }})
+        DOMAINS_MODIFIED=$(sed "s;^;$GITHUB_DOMAIN/;" <<< $DOMAINS_MODIFIED)
         echo "Domain Modified: $DOMAINS_MODIFIED"
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
@@ -48,36 +53,36 @@ runs:
     - run: |
         echo "Domain Names: ${{steps.convert_domains.outputs.domains_modified}}"
       shell: bash
-
-    - uses: actions/checkout@v3
-    - name: Checkout all domain repos
-      uses: vweevers/multi-checkout-action@v1
-      with:
-        token: ${{ inputs.GITHUB_PAT }}
-        repositories: |
-          ${{steps.convert_domains.outputs.domains_modified}}
-        path: repos
-
-    - name: Merge schema files
-      run: |
-        ls -lA repos/
-        ls -lA repos/Dechea
-        # ls -lA repos/Dechea/USR_Schema
-        # ls -lA repos/Dechea/CLS_Schema
-        ls -lA repos/Dechea/ORC_Schema
-        # ls -lA repos/Dechea/HES_Schema
-        # cd repos
-        # ls -lA
-        # mkdir -p schema
-        # IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-        # for index in "${!repoNames[@]}"
-        # do
-        #   echo "repo: ${repoNames[index]}"
-        #   cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-        # done
-        # echo "Successfully merge schema files"
-        # cat schema/schema.gql
-      shell: bash
+#
+#    - uses: actions/checkout@v3
+#    - name: Checkout all domain repos
+#      uses: vweevers/multi-checkout-action@v1
+#      with:
+#        token: ${{ inputs.GITHUB_PAT }}
+#        repositories: |
+#          ${{steps.convert_domains.outputs.domains_modified}}
+#        path: repos
+#
+#    - name: Merge schema files
+#      run: |
+#        ls -lA repos/
+#        ls -lA repos/Dechea
+#        # ls -lA repos/Dechea/USR_Schema
+#        # ls -lA repos/Dechea/CLS_Schema
+#        ls -lA repos/Dechea/ORC_Schema
+#        # ls -lA repos/Dechea/HES_Schema
+#        # cd repos
+#        # ls -lA
+#        # mkdir -p schema
+#        # IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+#        # for index in "${!repoNames[@]}"
+#        # do
+#        #   echo "repo: ${repoNames[index]}"
+#        #   cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+#        # done
+#        # echo "Successfully merge schema files"
+#        # cat schema/schema.gql
+#      shell: bash
 #
 #    - name: Upload Schema File
 #      run: |
