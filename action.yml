@@ -88,12 +88,12 @@ runs:
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
         do
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/__mocks__/ faunaTests/__mocks__/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/constants/ faunaTests/constants/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/fauna/src/ faunaTests/fauna/src/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/fauna/resources/ faunaTests/fauna/resources/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/fauna/tests/ faunaTests/fauna/tests/
-          [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/${repoNames[index],,}/fauna/util/ faunaTests/fauna/util/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/__mocks__/ faunaTests/__mocks__/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/constants/ faunaTests/constants/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/src/ faunaTests/fauna/src/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/resources/ faunaTests/fauna/resources/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/tests/ faunaTests/fauna/tests/
+          [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/ faunaTests/fauna/util/
           rsync -avuP util/ faunaTests/util/
         done
         echo "Successfully copied necessary files for testing"
