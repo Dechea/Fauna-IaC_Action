@@ -99,7 +99,7 @@ runs:
         echo "Successfully copied necessary files for testing"
       shell: bash
 
-    - name: Setup Node.js
+    - name: Setup Node.js, build and test
       id: cache-node-modules
       uses: actions/setup-node@v2
       with:
