@@ -41,13 +41,14 @@ runs:
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
+        echo "domains_modified=$DOMAINS_MODIFIED" >> $GITHUB_ENV
         echo "Domain Modified: $DOMAINS_MODIFIED"
         # echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
-        echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
+        # echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
 
     - run: |
-        echo "Domain Names: ${{steps.convert_domains.outputs.domains_modified}}"
+        echo "Domain Names: ${{env.domains_modified}}"
       shell: bash
 
     - uses: actions/checkout@v3
@@ -56,7 +57,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{steps.convert_domains.outputs.domains_modified}}
+          ${{env.domains_modified}}
         path: repos
 
     # - name: Checkout ORC_Schema
