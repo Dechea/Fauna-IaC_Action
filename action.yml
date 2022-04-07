@@ -46,54 +46,50 @@ runs:
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
 
-    # - run: |
-    #     echo "Domain Names: $DOMAINS_MODIFIED"
-    #   shell: bash
-
     - run: |
         echo "Domain Names: ${{steps.convert_domains.outputs.domains_modified}}"
       shell: bash
-#
-#    - uses: actions/checkout@v3
-#    - name: Checkout all domain repos
-#      uses: vweevers/multi-checkout-action@v1
-#      with:
-#        token: ${{ inputs.GITHUB_PAT }}
-#        repositories: |
-#          ${{ env.DOMAINS_MODIFIED }}"
-#        path: repos
 
-    - name: Checkout ORC_Schema
-      uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - name: Checkout all domain repos
+      uses: vweevers/multi-checkout-action@v1
       with:
-        repository: Dechea/ORC_Schema
-        ref: ${{ inputs.BRANCH }}
         token: ${{ inputs.GITHUB_PAT }}
-        path: repos/ORC_Schema
+        repositories: |
+          ${{steps.convert_domains.outputs.domains_modified}}
+        path: repos
 
-    - name: Checkout CLS_Schema
-      uses: actions/checkout@v3
-      with:
-        repository: Dechea/CLS_Schema
-        ref: ${{ inputs.BRANCH }}
-        token: ${{ inputs.GITHUB_PAT }}
-        path: repos/CLS_Schema
+    # - name: Checkout ORC_Schema
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: Dechea/ORC_Schema
+    #     ref: ${{ inputs.BRANCH }}
+    #     token: ${{ inputs.GITHUB_PAT }}
+    #     path: repos/ORC_Schema
 
-    - name: Checkout USR_Schema
-      uses: actions/checkout@v3
-      with:
-        repository: Dechea/USR_Schema
-        ref: ${{ inputs.BRANCH }}
-        token: ${{ inputs.GITHUB_PAT }}
-        path: repos/USR_Schema
+    # - name: Checkout CLS_Schema
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: Dechea/CLS_Schema
+    #     ref: ${{ inputs.BRANCH }}
+    #     token: ${{ inputs.GITHUB_PAT }}
+    #     path: repos/CLS_Schema
 
-    - name: Checkout HES_Schema
-      uses: actions/checkout@v3
-      with:
-        repository: Dechea/HES_Schema
-        ref: ${{ inputs.BRANCH }}
-        token: ${{ inputs.GITHUB_PAT }}
-        path: repos/HES_Schema
+    # - name: Checkout USR_Schema
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: Dechea/USR_Schema
+    #     ref: ${{ inputs.BRANCH }}
+    #     token: ${{ inputs.GITHUB_PAT }}
+    #     path: repos/USR_Schema
+
+    # - name: Checkout HES_Schema
+    #   uses: actions/checkout@v3
+    #   with:
+    #     repository: Dechea/HES_Schema
+    #     ref: ${{ inputs.BRANCH }}
+    #     token: ${{ inputs.GITHUB_PAT }}
+    #     path: repos/HES_Schema
 
     - name: Merge schema files
       run: |
