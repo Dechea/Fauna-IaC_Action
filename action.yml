@@ -39,18 +39,18 @@ runs:
     - name: "Convert string to array for domain names"
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})
+        echo "DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }})" >> GITHUB_ENV
         echo "Domain Modified: $DOMAINS_MODIFIED"
-        echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
+        # echo "$DOMAINS_MODIFIED" >> GITHUB_ENV
       shell: bash
 
     # - run: |
     #     echo "Domain Names: $DOMAINS_MODIFIED"
     #   shell: bash
 
-    # - run: |
-    #     echo "Domain Names: ${{ env.DOMAINS_MODIFIED }}"
-    #   shell: bash
+    - run: |
+        echo "Domain Names: ${{ env.DOMAINS_MODIFIED }}"
+      shell: bash
 #
 #    - uses: actions/checkout@v3
 #    - name: Checkout all domain repos
