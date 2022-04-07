@@ -97,7 +97,6 @@ runs:
           rsync -avuP util/ faunaTests/util/
         done
         echo "Successfully copied necessary files for testing"
-        ls -lA
       shell: bash
 
     - name: Setup Node.js
@@ -109,7 +108,6 @@ runs:
 
     - name: Use Node.js
       run: |
-        npm install 
-        ls -lA
-        # npm run test
+        npm install
+        npm run test
       shell: bash
