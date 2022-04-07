@@ -94,11 +94,10 @@ runs:
     - name: Merge schema files
       run: |
         ls -lA repos/
-        ls -lA repos/Dechea
-        ls -lA repos/Dechea/USR_Schema
-        ls -lA repos/Dechea/CLS_Schema
-        ls -lA repos/Dechea/ORC_Schema
-        ls -lA repos/Dechea/HES_Schema
+        # ls -lA repos/Dechea/USR_Schema
+        # ls -lA repos/Dechea/CLS_Schema
+        ls -lA repos/ORC_Schema
+        # ls -lA repos/Dechea/HES_Schema
         # cd repos
         # ls -lA
         # mkdir -p schema
