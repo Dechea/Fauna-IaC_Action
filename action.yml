@@ -100,7 +100,6 @@ runs:
         ls -lA
       shell: bash
 
-    - uses: actions/checkout@v2
     - name: Setup Node.js
       uses: actions/setup-node@v2
       with:
