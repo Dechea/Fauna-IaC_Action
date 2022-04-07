@@ -70,7 +70,7 @@ runs:
         for index in "${!repoNames[@]}"
         do
           echo "repo: ${repoNames[index]}"
-          cat ${repoNames[index]}/$GITHUB_DOMAIN/${repoNames[index],,}.gql >> schema/schema.gql
+          cat ${repoNames[index]}/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index],,}.gql >> schema/schema.gql
         done
         echo "Successfully merge schema files"
 #        cat schema/schema.gql
