@@ -8,13 +8,12 @@ inputs:
     description: 'The key used to access your Fauna database.'
     required: true
   BRANCH:
-    description: 'The branch that will be fetched from the other repos and deployed to the database. Eg. "Develop", "Release", "Master", ...'
+    description: 'The branch that will be fetched from the other repos and deployed to the database. Eg. "develop", "release", "master", ...'
     required: true
-    default: 'Prod'
+    default: 'master'
   GITHUB_DOMAIN:
     description: 'The domain/company of your github repository. Eg. Dechea'
     required: true
-    default: 'Prod'
   DATABASE:
     description: 'The target database where you want to apply the migration.'
     required: true
@@ -45,7 +44,6 @@ runs:
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }} ${{ inputs.GITHUB_DOMAIN }})
-        DOMAINS_MODIFIED=$(sed "s;^;$GITHUB_DOMAIN/;" <<< $DOMAINS_MODIFIED)
         echo "Domain Modified: $DOMAINS_MODIFIED"
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash

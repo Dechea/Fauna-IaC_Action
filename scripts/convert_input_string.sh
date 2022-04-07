@@ -19,7 +19,7 @@ BRANCH=$2
 GITHUB_DOMAIN=$3
 DOMAIN_LIST_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAIN_LIST)
 # Update the list to add the github domain as prefix
-#DOMAIN_LIST_MODIFIED=$(sed "s;^;$GITHUB_DOMAIN/;" <<< $DOMAIN_LIST_MODIFIED)
+DOMAIN_LIST_MODIFIED=$(sed "s;^;$GITHUB_DOMAIN/;" <<< $DOMAIN_LIST_MODIFIED)
 # Change special characters
 # Needed for multi-line variable in github actions
 #DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//'%'/'%25'}"
