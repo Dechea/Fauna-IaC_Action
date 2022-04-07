@@ -106,8 +106,36 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-    - name: Install Node.js and test
+#    - name: Install Node.js and test
+#      run: |
+#        npm install
+#        npm run test
+#      shell: bash
+#
+#    - name: Upload coverage files
+#      uses: actions/upload-artifact@v3
+#      with:
+#        name: coverage-files
+#        path: coverage/**
+
+    - name: Create Fauna migration files
       run: |
+        mkdir faunaTests faunaTests/fauna
+        ls -lA
+        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+        for index in "${!repoNames[@]}"
+        do
+          cp -r repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/* fauna
+        done
         npm install
-        npm run test
+        echo "FAUNA_ADMIN_KEY=${{ inputs.FAUNA_DOMAIN }}" >> $GITHUB_ENV
+        echo "FAUNADB_DOMAIN=${{ inputs.FAUNA_SECRET }}" >> $GITHUB_ENV
+        echo ${{ env.FAUNA_DOMAIN }}
+        echo ${{ env.FAUNA_SECRET }}
+#        npm run fauna:generate
+        echo "Successfully created fauna migration"
       shell: bash
+
+        cp -r repos/$repo/fauna/* fauna
+
+
