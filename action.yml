@@ -135,7 +135,3 @@ runs:
 #        npm run fauna:generate
         echo "Successfully created fauna migration"
       shell: bash
-
-        cp -r repos/$repo/fauna/* fauna
-
-
