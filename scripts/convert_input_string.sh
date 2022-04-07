@@ -14,5 +14,10 @@ fi
 BRANCH=$2
 DOMAIN_LIST="$1,"
 DOMAIN_LIST_MODIFIED=$(sed "s;,;@$BRANCH\n;g" <<< $DOMAIN_LIST)
+# Change special characters
+# Needed for multi-line variable in github actions
+DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//'%'/'%25'}"
+DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//$'\n'/'%0A'}"
+DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//$'\r'/'%0D'}"
 
 echo "$DOMAIN_LIST_MODIFIED"
