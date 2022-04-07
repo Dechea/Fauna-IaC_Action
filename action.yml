@@ -133,5 +133,5 @@ runs:
         echo ${{ env.FAUNA_DOMAIN }}
         echo ${{ env.FAUNA_SECRET }}
 #        npm run fauna:generate
-        echo "Successfully created fauna migration"
+#        echo "Successfully created fauna migration"
       shell: bash
