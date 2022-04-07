@@ -8,7 +8,7 @@ elif [[ -z "$2" ]] ; then
     exit 1
 fi
 
-echo "Received list of domains: $1, $2"
+# echo "Received list of domains: $1, $2"
 
 # Convert domain list
 BRANCH=$2
