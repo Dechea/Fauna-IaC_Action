@@ -106,14 +106,8 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-    - name: Install Node.js
+    - name: Install Node.js and test
       run: |
         npm install
-      # Install dependencies only if there were not found in the cache
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
-      shell: bash
-
-    - name: Use Node.js
-      run: |
         npm run test
       shell: bash
