@@ -147,3 +147,11 @@ runs:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
         FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
 
+    - name: Commit Fauna migration folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: migrations/${{ inputs.DATABASE }}/
+        author_name: Bhanu Agrawal
+        author_email: bhanu.agrawal@dechea.com
+        message: 'updated migration [skip ci]'
+
