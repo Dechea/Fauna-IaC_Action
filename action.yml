@@ -100,11 +100,11 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-#    - name: Install Node.js and test
-#      run: |
-#        npm install
-#        npm run test
-#      shell: bash
+    - name: Install Node.js and test
+      run: |
+        npm install
+        npm run test
+      shell: bash
 #
 #    - name: Upload coverage files
 #      uses: actions/upload-artifact@v3
