@@ -77,7 +77,6 @@ runs:
 
     - name: Merge all test files 
       run: |
-        # mkdir faunaTests faunaTests/fauna
         ls -lA
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
@@ -100,11 +99,11 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-    - name: Install Node.js and test
-      run: |
-        npm install
-        npm run test
-      shell: bash
+    # - name: Install Node.js and test
+    #   run: |
+    #     npm install
+    #     npm run test
+    #   shell: bash
 #
 #    - name: Upload coverage files
 #      uses: actions/upload-artifact@v3
@@ -114,12 +113,6 @@ runs:
 
     - name: Create Fauna migration files
       run: |
-        # IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-        # for index in "${!repoNames[@]}"
-        # do
-        #   cp -r repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/* fauna
-        # done
-        ls -lA
         npm install
         npm run fauna:generate
         echo "Successfully created fauna migration"
