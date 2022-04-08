@@ -33,7 +33,8 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - name: "Print out input variables passed"
+      run: |
         echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
         echo "Input array: ${{ inputs.DOMAINS }}"
         echo "Input branch: ${{ inputs.BRANCH }}"
@@ -48,11 +49,8 @@ runs:
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
 
-    - run: |
-        echo "Domain Names: ${{steps.convert_domains.outputs.domains_modified}}"
-      shell: bash
-
     - uses: actions/checkout@v3
+    
     - name: Checkout all domain repos
       uses: vweevers/multi-checkout-action@v1
       with:
