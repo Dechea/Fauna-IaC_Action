@@ -130,24 +130,22 @@ runs:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
         FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
 
+    - name: Copy Fauna migration inside correct dirctory
+      run: |
+        mkdir -p migrations/${{ inputs.DATABASE }}
+        rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
+        echo "Successfully copied fauna migration"
+        ls -lA
+        ls -lA migrations/${{ inputs.DATABASE }}/
+      shell: bash
+      
     - name: Apply Fauna migration
       run: |
         npm install
         npm run fauna:apply
         echo "Successfully applied fauna migration"
-        ls -lA fauna/migrations/
       shell: bash
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
         FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
-
-    - name: Copy Fauna migration inside correct dirctory
-      run: |
-        # mkdir -p migrations/${{ inputs.DATABASE }}
-        # rsync -avuP migrations/ migrations/${{ inputs.DATABASE }}/
-        echo "Successfully copied fauna migration"
-        ls -lA
-        # ls -lA migrations/
-        # ls -lA migrations/${{ inputs.DATABASE }}/
-      shell: bash
 
