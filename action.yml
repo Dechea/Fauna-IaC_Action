@@ -143,7 +143,7 @@ runs:
 
     - name: Copy Fauna migration inside correct dirctory
       run: |
-        mkdir -p migrations/${{ inputs.DATABASE }}
+        # mkdir -p migrations/${{ inputs.DATABASE }}
         # rsync -avuP migrations/ migrations/${{ inputs.DATABASE }}/
         echo "Successfully copied fauna migration"
         ls -lA
