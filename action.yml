@@ -61,7 +61,7 @@ runs:
           ${{steps.convert_domains.outputs.domains_modified}}
         path: repos
 
-    - name: Merge schema files
+    - name: Merge GraphQL schema files
       run: |
         cd repos/${{ inputs.GITHUB_DOMAIN }}
         ls -lA
@@ -81,7 +81,7 @@ runs:
 #        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
 #      shell: bash
 
-    - name: Merge all test files
+    - name: Merge all test files 
       run: |
         mkdir faunaTests faunaTests/fauna
         ls -lA
