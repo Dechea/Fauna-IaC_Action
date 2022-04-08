@@ -132,3 +132,13 @@ runs:
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
         FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
+
+    - name: Apply Fauna migration
+      run: |
+        npm install
+        npm run fauna:apply
+        echo "Successfully applied fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
