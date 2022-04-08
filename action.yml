@@ -77,18 +77,18 @@ runs:
 
     - name: Merge all test files 
       run: |
-        mkdir faunaTests faunaTests/fauna
+        # mkdir faunaTests faunaTests/fauna
         ls -lA
         IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
         for index in "${!repoNames[@]}"
         do
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/__mocks__/ faunaTests/__mocks__/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/constants/ faunaTests/constants/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/src/ faunaTests/fauna/src/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/resources/ faunaTests/fauna/resources/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/tests/ faunaTests/fauna/tests/
-          [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/ faunaTests/fauna/util/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/util/ faunaTests/util/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/__mocks__/ __mocks__/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/constants/ constants/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/src/ fauna/src/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/resources/ fauna/resources/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/tests/ fauna/tests/
+          [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/ fauna/util/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/util/ util/
         done
         echo "Successfully copied necessary files for testing"
       shell: bash
@@ -114,11 +114,12 @@ runs:
 
     - name: Create Fauna migration files
       run: |
-        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-        for index in "${!repoNames[@]}"
-        do
-          cp -r repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/* fauna
-        done
+        # IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+        # for index in "${!repoNames[@]}"
+        # do
+        #   cp -r repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/* fauna
+        # done
+        ls -lA
         npm install
         npm run fauna:generate
         echo "Successfully created fauna migration"
