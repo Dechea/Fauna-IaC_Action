@@ -48,7 +48,7 @@ runs:
         echo "Domain Modified: $DOMAINS_MODIFIED"
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
-
+    
     - uses: actions/checkout@v3
     
     - name: Checkout all domain repos
@@ -71,7 +71,6 @@ runs:
           cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
         done
         echo "Successfully merge schema files"
-#        cat schema/schema.gql
       shell: bash
 #
 #    - name: Upload Schema File
@@ -92,7 +91,7 @@ runs:
           rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/resources/ faunaTests/fauna/resources/
           rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/tests/ faunaTests/fauna/tests/
           [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/ faunaTests/fauna/util/
-          rsync -avuP util/ faunaTests/util/
+          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/util/ faunaTests/util/
         done
         echo "Successfully copied necessary files for testing"
       shell: bash
