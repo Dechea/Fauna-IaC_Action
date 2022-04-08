@@ -135,10 +135,8 @@ runs:
         mkdir -p migrations/${{ inputs.DATABASE }}
         rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
         echo "Successfully copied fauna migration"
-        ls -lA
-        ls -lA migrations/${{ inputs.DATABASE }}/
       shell: bash
-      
+
     - name: Apply Fauna migration
       run: |
         npm install
