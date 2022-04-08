@@ -126,10 +126,12 @@ runs:
           cp -r repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/* fauna
         done
         npm install
-        echo "FAUNA_ADMIN_KEY=${{ inputs.FAUNA_DOMAIN }}" >> $GITHUB_ENV
-        echo "FAUNADB_DOMAIN=${{ inputs.FAUNA_SECRET }}" >> $GITHUB_ENV
+
         echo ${{ env.FAUNA_DOMAIN }}
         echo ${{ env.FAUNA_SECRET }}
 #        npm run fauna:generate
 #        echo "Successfully created fauna migration"
       shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
