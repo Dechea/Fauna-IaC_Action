@@ -5,13 +5,14 @@ if [[ -z "$1" ]] ; then
     exit 1
 fi
 
-# Convert domain list
-DOMAIN_LIST="$1,"
-DOMAIN_LIST_MODIFIED=$(sed "s;,;\n;g" <<< $DOMAIN_LIST)
+# Convert INPUT list
+INPUT_LIST="$1,"
+SED_STRING=$2
+INPUT_LIST_MODIFIED=$(sed "$SED_STRING" <<< "$INPUT_LIST")
 # Change special characters
 # Needed for multi-line variable in github actions
-DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//'%'/'%25'}"
-DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//$'\n'/'%0A'}"
-DOMAIN_LIST_MODIFIED="${DOMAIN_LIST_MODIFIED//$'\r'/'%0D'}"
+INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//'%'/'%25'}"
+INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//$'\n'/'%0A'}"
+INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//$'\r'/'%0D'}"
 
-echo "$DOMAIN_LIST_MODIFIED"
+echo "$INPUT_LIST_MODIFIED"

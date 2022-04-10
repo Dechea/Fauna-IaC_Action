@@ -40,12 +40,12 @@ runs:
       id: convert_domains
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} )
-        GITHUB_DOMAIN=$(sed "s;/.*;;" <<< $GITHUB_REPOSITORIES)
-        GITHUB_REPOSITORY_NAMES=$(sed "s;/\(.*\)@;\1;" <<< $GITHUB_REPOSITORIES)
+        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
+        GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;" )
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/\(.*\)@;\1;" )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
-        echo "$GITHUB_DOMAIN"
-        echo "$GITHUB_REPOSITORY_NAMES"
+        echo "GH: $GITHUB_DOMAIN"
+        echo "GHR: $GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: Checkout all domain repos
