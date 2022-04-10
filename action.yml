@@ -7,12 +7,9 @@ inputs:
   FAUNA_SECRET:
     description: 'The key used to access your Fauna database.'
     required: true
-  BRANCH:
-    description: 'The branch that will be fetched from the other repos and deployed to the database. Eg. "develop", "release", "master", ...'
-    required: true
-    default: 'master'
-  GITHUB_DOMAIN:
-    description: 'The domain/company of your github repository. Eg. Dechea'
+  GITHUB_REPOSITORIES:
+    description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or organization/name@ref where ref is a branch name, tag or SHA to checkout.
+                  Eg. "Dechea/exampleRepository, Dechea/AnotherExampleRepository@v2"'
     required: true
   DATABASE:
     description: 'The target database where you want to apply the migration.'
@@ -36,15 +33,14 @@ runs:
     - name: "Print out input variables passed"
       run: |
         echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
-        echo "Input array: ${{ inputs.DOMAINS }}"
-        echo "Input branch: ${{ inputs.BRANCH }}"
+        echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
       shell: bash
 
     - name: "Convert string to array for domain names"
       id: convert_domains
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.DOMAINS }} ${{ inputs.BRANCH }} ${{ inputs.GITHUB_DOMAIN }})
+        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
       shell: bash
 
@@ -55,103 +51,103 @@ runs:
         repositories: |
           ${{steps.convert_domains.outputs.domains_modified}}
         path: repos
-
-    - name: Merge GraphQL schema files
-      run: |
-        cd repos/${{ inputs.GITHUB_DOMAIN }}
-        ls -lA
-        mkdir -p schema
-        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-        for index in "${!repoNames[@]}"
-        do
-          echo "repo: ${repoNames[index]}"
-          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-        done
-        echo "Successfully merge schema files"
-      shell: bash
 #
-#    - name: Upload Schema File
+#    - name: Merge GraphQL schema files
 #      run: |
-#        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
+#        cd repos/${{ inputs.GITHUB_DOMAIN }}
+#        ls -lA
+#        mkdir -p schema
+#        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+#        for index in "${!repoNames[@]}"
+#        do
+#          echo "repo: ${repoNames[index]}"
+#          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+#        done
+#        echo "Successfully merge schema files"
 #      shell: bash
-
-    - name: Merge all test files 
-      run: |
-        ls -lA
-        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
-        for index in "${!repoNames[@]}"
-        do
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/__mocks__/ __mocks__/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/constants/ constants/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/src/ fauna/src/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/resources/ fauna/resources/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/tests/ fauna/tests/
-          [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/ fauna/util/
-          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/util/ util/
-        done
-        echo "Successfully copied necessary files for testing"
-      shell: bash
-
-    - name: Setup Node.js
-      id: cache-node-modules
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-        cache: 'npm'
-
-    # - name: Install Node.js and test
-    #   run: |
-    #     npm install
-    #     npm run test
-    #   shell: bash
+##
+##    - name: Upload Schema File
+##      run: |
+##        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
+##      shell: bash
 #
-#    - name: Upload coverage files
-#      uses: actions/upload-artifact@v3
+#    - name: Merge all test files
+#      run: |
+#        ls -lA
+#        IFS="," read -a repoNames <<< ${{ inputs.DOMAINS }}
+#        for index in "${!repoNames[@]}"
+#        do
+#          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/__mocks__/ __mocks__/
+#          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/constants/ constants/
+#          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/src/ fauna/src/
+#          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/resources/ fauna/resources/
+#          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/tests/ fauna/tests/
+#          [ -d "repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/fauna/util/ fauna/util/
+#          rsync -avuP repos/${{ inputs.GITHUB_DOMAIN }}/${repoNames[index]}/util/ util/
+#        done
+#        echo "Successfully copied necessary files for testing"
+#      shell: bash
+#
+#    - name: Setup Node.js
+#      id: cache-node-modules
+#      uses: actions/setup-node@v2
 #      with:
-#        name: coverage-files
-#        path: coverage/**
-
-    - name: Create Fauna migration files
-      run: |
-        npm install
-        npm run fauna:generate
-        echo "Successfully created fauna migration"
-      shell: bash
-      env:
-        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
-        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
-
-    - name: Check Fauna migration state
-      run: |
-        npm install
-        npm run fauna:state
-      shell: bash
-      env:
-        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
-
-    - name: Copy Fauna migration inside correct dirctory
-      run: |
-        mkdir -p migrations/${{ inputs.DATABASE }}
-        rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
-        echo "Successfully copied fauna migration"
-      shell: bash
-
-    - name: Apply Fauna migration
-      run: |
-        npm install
-        npm run fauna:apply
-        echo "Successfully applied fauna migration"
-      shell: bash
-      env:
-        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
-
-    - name: Commit Fauna migration folder
-      uses: EndBug/add-and-commit@v9
-      with:
-        add: migrations/${{ inputs.DATABASE }}/
-        author_name: Bhanu Agrawal
-        author_email: bhanu.agrawal@dechea.com
-        message: 'updated migration [skip ci]'
-
+#        node-version: '14'
+#        cache: 'npm'
+#
+#    # - name: Install Node.js and test
+#    #   run: |
+#    #     npm install
+#    #     npm run test
+#    #   shell: bash
+##
+##    - name: Upload coverage files
+##      uses: actions/upload-artifact@v3
+##      with:
+##        name: coverage-files
+##        path: coverage/**
+#
+#    - name: Create Fauna migration files
+#      run: |
+#        npm install
+#        npm run fauna:generate
+#        echo "Successfully created fauna migration"
+#      shell: bash
+#      env:
+#        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
+#        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
+#
+#    - name: Check Fauna migration state
+#      run: |
+#        npm install
+#        npm run fauna:state
+#      shell: bash
+#      env:
+#        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+#        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+#
+#    - name: Copy Fauna migration inside correct dirctory
+#      run: |
+#        mkdir -p migrations/${{ inputs.DATABASE }}
+#        rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
+#        echo "Successfully copied fauna migration"
+#      shell: bash
+#
+#    - name: Apply Fauna migration
+#      run: |
+#        npm install
+#        npm run fauna:apply
+#        echo "Successfully applied fauna migration"
+#      shell: bash
+#      env:
+#        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+#        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+#
+#    - name: Commit Fauna migration folder
+#      uses: EndBug/add-and-commit@v9
+#      with:
+#        add: migrations/${{ inputs.DATABASE }}/
+#        author_name: Bhanu Agrawal
+#        author_email: bhanu.agrawal@dechea.com
+#        message: 'updated migration [skip ci]'
+#
