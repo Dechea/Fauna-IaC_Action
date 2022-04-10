@@ -42,11 +42,13 @@ runs:
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;" )
-        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;.*$GITHUB_DOMAIN/\(.*\)@.*;\1;g" )
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;.*$GITHUB_DOMAIN/;;g" )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
         echo "GH: $GITHUB_DOMAIN"
         echo "GHR: $GITHUB_REPOSITORY_NAMES"
       shell: bash
+
+  's;.*$DOMAIN/\(.*\),.*;\1;'
 
     - name: Checkout all domain repos
       uses: vweevers/multi-checkout-action@v1
