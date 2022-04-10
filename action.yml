@@ -48,6 +48,13 @@ runs:
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
+    - name: "Print out modified variables"
+      run: |
+        echo "Input DOMAINS_MODIFIED: ${{steps.convert_domains.outputs.domains_modified}}"
+        echo "Input GITHUB_DOMAIN: ${{steps.convert_domains.outputs.domain}}"
+        echo "Input GITHUB_REPOSITORY_NAMES: ${{steps.convert_domains.outputs.repository_names}}"
+      shell: bash
+
     - name: Checkout all domain repos
       uses: vweevers/multi-checkout-action@v1
       with:
