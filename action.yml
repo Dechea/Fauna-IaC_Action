@@ -48,8 +48,6 @@ runs:
         echo "GHR: $GITHUB_REPOSITORY_NAMES"
       shell: bash
 
-  's;.*$DOMAIN/\(.*\),.*;\1;'
-
     - name: Checkout all domain repos
       uses: vweevers/multi-checkout-action@v1
       with:
