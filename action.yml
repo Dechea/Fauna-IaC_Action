@@ -41,8 +41,8 @@ runs:
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
-        GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;" )
-        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g ; s;$DOMAIN/;;g" )
+        GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;$DOMAIN/;;g ; s;,;\n;g" )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
         echo "::set-output name=domain::$GITHUB_DOMAIN"
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
