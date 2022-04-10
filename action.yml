@@ -44,8 +44,8 @@ runs:
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;" )
         GITHUB_REPOSITORY_NAMES=$( sed "s;.*$GITHUB_DOMAIN/;;g" <<< ${{ inputs.GITHUB_REPOSITORIES }} )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
-        echo "GH: $GITHUB_DOMAIN"
-        echo "GHR: $GITHUB_REPOSITORY_NAMES"
+        echo "::set-output name=domain::$GITHUB_DOMAIN"
+        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: Checkout all domain repos
@@ -53,7 +53,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{steps.convert_domains.outputs.domains_modified}}
+          ${{steps.convert_domains.outputs.repository_names}}
         path: repos
 #
 #    - name: Merge GraphQL schema files
