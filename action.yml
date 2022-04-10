@@ -41,7 +41,11 @@ runs:
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} )
+        GITHUB_DOMAIN=$(sed "s;/.*;;" <<< $GITHUB_REPOSITORIES)
+        GITHUB_REPOSITORY_NAMES$(sed "s;/\(.*\)@;\1;" <<< $GITHUB_REPOSITORIES)
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
+        echo "$GITHUB_DOMAIN"
+        echo "$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: Checkout all domain repos
