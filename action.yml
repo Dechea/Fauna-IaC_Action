@@ -53,7 +53,7 @@ runs:
         split-by: "${{steps.convert_domains.outputs.domain}}/"
     - run: |
         GITHUB_REPOSITORY_NAMES=${{ join(steps.github_repository_names.outputs.*, '') }}
-        echo "::set-output name=repository_names::${{ "$GITHUB_REPOSITORY_NAMES" }}"
+        echo "::set-output name=repository_names::${{ GITHUB_REPOSITORY_NAMES }}"
       shell: bash
 
     - name: "Print out modified variables"
