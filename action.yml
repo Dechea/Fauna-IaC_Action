@@ -52,7 +52,7 @@ runs:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{steps.convert_domains.outputs.domain}}/"
     - run: |
-        GITHUB_REPOSITORY_NAMES=${{ steps.github_repository_names.outputs.* }}
+        GITHUB_REPOSITORY_NAMES=${{ steps.github_repository_names.outputs }}
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
@@ -60,7 +60,7 @@ runs:
       run: |
         echo "Input DOMAINS_MODIFIED: ${{steps.convert_domains.outputs.domains_modified}}"
         echo "Input GITHUB_DOMAIN: ${{steps.convert_domains.outputs.domain}}"
-        echo "Input GITHUB_REPOSITORY_NAMES: ${{join(steps.github_repository_names.outputs.repository_names, '')}}"
+        echo "Input GITHUB_REPOSITORY_NAMES: ${{join(steps.github_repository_names.outputs.repository_names.*, '')}}"
       shell: bash
 
     - name: Checkout all domain repos
