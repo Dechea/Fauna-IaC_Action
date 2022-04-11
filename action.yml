@@ -42,10 +42,8 @@ runs:
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
-        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;$GITHUB_DOMAIN/;;" )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
         echo "::set-output name=domain::$GITHUB_DOMAIN"
-        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - uses: rishabhgupta/split-by@v1
@@ -54,14 +52,14 @@ runs:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{steps.convert_domains.outputs.domain}}/"
     - run: |
-        echo "OUTPUT: ${{ join(steps.github_repository_names.outputs.*, '')}}"
+        echo ":set-output name=repository_names::${{ join(steps.github_repository_names.outputs.*, '')}}"
       shell: bash
 
     - name: "Print out modified variables"
       run: |
         echo "Input DOMAINS_MODIFIED: ${{steps.convert_domains.outputs.domains_modified}}"
         echo "Input GITHUB_DOMAIN: ${{steps.convert_domains.outputs.domain}}"
-        echo "Input GITHUB_REPOSITORY_NAMES: ${{steps.convert_domains.outputs.repository_names}}"
+        echo "Input GITHUB_REPOSITORY_NAMES: ${{steps.github_repository_names.outputs.repository_names}}"
       shell: bash
 
     - name: Checkout all domain repos
