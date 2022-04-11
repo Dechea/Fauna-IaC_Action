@@ -48,6 +48,15 @@ runs:
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
+    - uses: rishabhgupta/split-by@v1
+      id: github_repository_names
+      with:
+        string: ${{ inputs.GITHUB_REPOSITORIES }}
+        split-by: "${{steps.convert_domains.outputs.domain}}/"
+    - run: |
+        echo "${{ steps.github_repository_names.outputs._1}}"
+      shell: bash
+
     - name: "Print out modified variables"
       run: |
         echo "Input DOMAINS_MODIFIED: ${{steps.convert_domains.outputs.domains_modified}}"
