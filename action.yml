@@ -68,7 +68,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{steps.convert_domains.outputs.domains_modified}}
+          ${{ steps.github_repository_names.outputs.repository_names }}
         path: repos
 #
 #    - name: Merge GraphQL schema files
