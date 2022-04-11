@@ -53,14 +53,16 @@ runs:
         split-by: "${{steps.convert_domains.outputs.domain}}/"
     - run: |
         GITHUB_REPOSITORY_NAMES=${{ steps.github_repository_names.outputs }}
-        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
+        echo "::set-output name=repository_names::$(join(GITHUB_REPOSITORY_NAMES, ''))"
+        echo "::set-output name=repository_names2::$(join($GITHUB_REPOSITORY_NAMES, ''))"
       shell: bash
 
     - name: "Print out modified variables"
       run: |
         echo "Input DOMAINS_MODIFIED: ${{steps.convert_domains.outputs.domains_modified}}"
         echo "Input GITHUB_DOMAIN: ${{steps.convert_domains.outputs.domain}}"
-        echo "Input GITHUB_REPOSITORY_NAMES: ${{join(steps.github_repository_names.outputs.repository_names.*, '')}}"
+        echo "Input GITHUB_REPOSITORY_NAMES: ${{steps.github_repository_names.outputs.repository_names}}"
+        echo "Input GITHUB_REPOSITORY_NAMES2: ${{steps.github_repository_names.outputs.repository_names2}}"
       shell: bash
 
     - name: Checkout all domain repos
