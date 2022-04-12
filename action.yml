@@ -76,23 +76,23 @@ runs:
         echo "Logging - with [@Ref]"
       shell: bash
 
-    - name: "Convert input repository string - with [@Ref]"
-      id: convert_domains_ref
-      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
-      run: |
-        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
-        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
-      shell: bash
-
     - name: "Remove domain string from modified input string - with [@Ref]"
       uses: rishabhgupta/split-by@v1
       id: split-ref
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       with:
-        string: ${{ steps.convert_domains_ref.outputs.domains_modified }}
+        string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
     - run: |
         echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
+      shell: bash
+
+    - name: "Convert input repository string - with [@Ref]"
+      id: convert_domains_ref
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      run: |
+        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ join(steps.split-ref.outputs.*, '') }} "s;,;\n;g" "@|," )
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
       shell: bash
 
     #### END
@@ -105,7 +105,7 @@ runs:
         echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split-ref.outputs.*, '') }}"
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
-        GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split-ref.outputs.*, '') }}
+        GITHUB_REPOSITORY_NAMES_2=${{ steps.convert_domains_ref.outputs.domains_modified }}
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
 
