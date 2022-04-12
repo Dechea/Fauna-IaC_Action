@@ -51,17 +51,6 @@ runs:
       with:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
-    - run: |
-        GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
-        GITHUB_REPOSITORY_NAMES="${GITHUB_REPOSITORY_NAMES//'%'/'%25'}"
-        GITHUB_REPOSITORY_NAMES="${GITHUB_REPOSITORY_NAMES//$'\n'/'%0A'}"
-        GITHUB_REPOSITORY_NAMES="${GITHUB_REPOSITORY_NAMES//$'\r'/'%0D'}"
-        echo "domain: ${{ steps.convert_domains.outputs.domain }}/"
-        echo "Input GITHUB_REPOSITORY_NAMES: ${{ inputs.GITHUB_REPOSITORIES }}"
-        echo "Testing split part: ${{ steps.split.outputs._1 }}"
-        echo "Joined part: ${{ join(steps.split.outputs.*, '') }}"
-        echo "repository names: $GITHUB_REPOSITORY_NAMES"
-        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: "Print out modified variables"
@@ -74,17 +63,12 @@ runs:
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
-    - name: "Testing"
-      run: |
-        echo "Test and print: ${{ steps.print_repo_names.outputs.repository_names }}"
-      shell: bash
-
     - name: Checkout all domain repos
       uses: vweevers/multi-checkout-action@v1
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{ steps.print_repo_names.outputs.repository_names }}
+          ${{ inputs.GITHUB_REPOSITORIES }}
         path: repos
 #
 #    - name: Merge GraphQL schema files
