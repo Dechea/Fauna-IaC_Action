@@ -47,14 +47,14 @@ runs:
     #### IF - NO REF IS SET
 
     - name: "Logging - without [@Ref]"
-      if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
         echo "Logging - without [@Ref]"
       shell: bash
 
     - name: "Convert input repository string - without [@Ref]"
       id: convert_domains
-      if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
         DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
         echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
@@ -63,7 +63,7 @@ runs:
     - name: "Remove domain string from modified input string - without [@Ref]"
       uses: rishabhgupta/split-by@v1
       id: split
-      if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
       with:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
@@ -74,14 +74,14 @@ runs:
     #### ELSE IF - REF IS SET
 
     - name: "Logging - with [@Ref]"
-      if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
         echo "Logging - with [@Ref]"
       shell: bash
 
     - name: "Convert input repository string - with [@Ref]"
       id: convert_domains_at
-      if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
         GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
         GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;\n;,;g" )
@@ -91,7 +91,7 @@ runs:
     - name: "Remove domain string from modified input string - with [@Ref]"
       uses: rishabhgupta/split-by@v1
       id: split-at
-      if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       with:
         string: ${{ steps.convert_domains_at.outputs.domains_modified }}
         split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
