@@ -100,14 +100,13 @@ runs:
     - name: "Print out modified variables"
       id: print_repo_names
       run: |
-        echo "Input DOMAINS_MODIFIED: ${{ steps.convert_github_domains.outputs.domains_modified }}"
-        echo "Input GITHUB_DOMAIN: ${{ steps.convert_domains.outputs.domain }}"
+        echo "Input GITHUB_DOMAIN: ${{ steps.convert_github_domains.outputs.domain }}"
         echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
         echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split-ref.outputs.*, '') }}"
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split-ref.outputs.*, '') }}
-        echo "::set-output name=repository_names_at::$GITHUB_REPOSITORY_NAMES_2"
+        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
 
 #
