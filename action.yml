@@ -81,8 +81,7 @@ runs:
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
         GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
-        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string.sh $GITHUB_REPOSITORY_NAMES_REF "s;\n;,;g" )
-        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
+        echo "::set-output name=domains_modified::${{ join(GITHUB_REPOSITORY_NAMES_REF, '')"
       shell: bash
 
     - name: "Remove domain string from modified input string - with [@Ref]"
