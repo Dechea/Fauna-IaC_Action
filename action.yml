@@ -51,7 +51,7 @@ runs:
       with:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
-      run: |
+    - run: |
         echo "Joined part: ${{ join(steps.split.outputs.*, '') }}"
       shell: bash
 
