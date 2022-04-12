@@ -82,6 +82,9 @@ runs:
       run: |
         GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
         echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
+        GITHUB_REPOSITORY_NAMES_REF2=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ join(steps.convert_domains_ref.outputs.domains_modified, '') }} "s;\n;,;g" )
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF2"
+
       shell: bash
 
     - name: "Remove domain string from modified input string - with [@Ref]"
