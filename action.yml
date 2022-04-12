@@ -68,7 +68,7 @@ runs:
       run: |
         echo "Input DOMAINS_MODIFIED: ${{ steps.convert_domains.outputs.domains_modified }}"
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_domains.outputs.domain }}"
-        echo "Input GITHUB_REPOSITORY_NAMES: ${{ steps.split.outputs.repository_names }}"
+        echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
       shell: bash
 
     - name: Checkout all domain repos
@@ -76,7 +76,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{ steps.split.outputs.repository_names }}
+          ${{ join(steps.split.outputs.*, '') }}
         path: repos
 #
 #    - name: Merge GraphQL schema files
