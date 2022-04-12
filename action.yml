@@ -58,8 +58,8 @@ runs:
     - uses: rishabhgupta/split-by@v1
       id: split-at
       with:
-        string:  ${{ format('{0}@v1', inputs.GITHUB_REPOSITORIES) }}
-        split-by: "@"
+        string:  "Dechea/ORC_Schema,Dechea/USR_Schema@v2,Dechea/CLS_Schema@v1,Dechea/HES_Schema@v1"
+        split-by: "@.*,"
     - run: |
         echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
