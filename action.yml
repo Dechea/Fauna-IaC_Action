@@ -46,6 +46,12 @@ runs:
 
     #### IF - NO REF IS SET
 
+    - name: "Logging - without [@Ref]"
+      if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      run: |
+        echo "Logging - without [@Ref]"
+      shell: bash
+
     - name: "Convert input repository string - without [@Ref]"
       id: convert_domains
       if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
@@ -66,6 +72,12 @@ runs:
       shell: bash
 
     #### ELSE IF - REF IS SET
+
+    - name: "Logging - with [@Ref]"
+      if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      run: |
+        echo "Logging - with [@Ref]"
+      shell: bash
 
     - name: "Convert input repository string - with [@Ref]"
       id: convert_domains_at
