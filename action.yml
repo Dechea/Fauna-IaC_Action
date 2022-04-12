@@ -74,6 +74,11 @@ runs:
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
+    - name: "Testing"
+      run: |
+        echo "Test and print: ${{ steps.print_repo_names.outputs.repository_names }}"
+      shell: bash
+
     - name: Checkout all domain repos
       uses: vweevers/multi-checkout-action@v1
       with:
