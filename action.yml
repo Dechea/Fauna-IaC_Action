@@ -36,18 +36,28 @@ runs:
         echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
       shell: bash
 
-    - name: "Convert string to array for domain names"
+    - name: "Convert input repository string to domain name"
       id: convert_domains
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
-        echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
         echo "::set-output name=domain::$GITHUB_DOMAIN"
       shell: bash
 
-    - uses: rishabhgupta/split-by@v1
+    #### IF - NO REF IS SET
+
+    - name: "Convert input repository string - without [@Ref]"
+      id: convert_domains
+      if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
+      run: |
+        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
+        echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
+      shell: bash
+
+    - name: "Remove domain string from modified input string - without [@Ref]"
+      uses: rishabhgupta/split-by@v1
       id: split
+      if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
       with:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
@@ -55,22 +65,29 @@ runs:
         echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
 
-    - name: "Convert string to array for domain names - @"
+    #### ELSE IF - REF IS SET
+
+    - name: "Convert input repository string - with [@Ref]"
       id: convert_domains_at
+      if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
       run: |
         GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
         GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;\n;,;g" )
         echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_AT"
       shell: bash
 
-    - uses: rishabhgupta/split-by@v1
+    - name: "Remove domain string from modified input string - with [@Ref]"
+      uses: rishabhgupta/split-by@v1
       id: split-at
+      if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
       with:
         string: ${{ steps.convert_domains_at.outputs.domains_modified }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
     - run: |
         echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
+
+    #### END
 
     - name: "Print out modified variables"
       id: print_repo_names
