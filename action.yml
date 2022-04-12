@@ -76,7 +76,8 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{ join(steps.split.outputs.*, '') }}
+          GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
+          $GITHUB_REPOSITORY_NAMES
         path: repos
 #
 #    - name: Merge GraphQL schema files
