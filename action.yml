@@ -52,7 +52,7 @@ runs:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
     - run: |
-        echo "Joined part: ${{ join(steps.split.outputs.*, '') }}"
+        echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
 
     - name: "Print out modified variables"
@@ -65,13 +65,13 @@ runs:
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
-    - name: Checkout all domain repos
-      uses: vweevers/multi-checkout-action@v1
-      with:
-        token: ${{ inputs.GITHUB_PAT }}
-        repositories: |
-          ${{ inputs.GITHUB_REPOSITORIES }}
-        path: repos
+    # - name: Checkout all domain repos
+    #   uses: vweevers/multi-checkout-action@v1
+    #   with:
+    #     token: ${{ inputs.GITHUB_PAT }}
+    #     repositories: |
+    #       ${{ inputs.GITHUB_REPOSITORIES }}
+    #     path: repos
 #
 #    - name: Merge GraphQL schema files
 #      run: |
