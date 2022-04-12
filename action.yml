@@ -55,11 +55,18 @@ runs:
         echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
 
+    - name: "Convert string to array for domain names - @"
+      id: convert_domains_at
+      run: |
+        GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_AT"
+      shell: bash
+
     - uses: rishabhgupta/split-by@v1
       id: split-at
       with:
-        string:  "Dechea/ORC_Schema,Dechea/USR_Schema@v2,Dechea/CLS_Schema@v1,Dechea/HES_Schema@v1"
-        split-by: "@.*,"
+        string: ${{ steps.convert_domains_at.outputs.domains_modified }}
+        split-by: "${{ steps.convert_domains.outputs.domain }}/"
     - run: |
         echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
@@ -71,9 +78,12 @@ runs:
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_domains.outputs.domain }}"
         echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
         echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split-at.outputs.*, '') }}"
-        GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
-        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
+        GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
+        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
+        GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split-at.outputs.*, '') }}
+        echo "::set-output name=repository_names_at::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
+
 #
 #    - name: Checkout all domain repos
 #      uses: vweevers/multi-checkout-action@v1
