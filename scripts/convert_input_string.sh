@@ -11,7 +11,7 @@ SED_STRING=$2
 INPUT_LIST_MODIFIED=$(sed "$SED_STRING" <<< "$INPUT_LIST")
 
 # Remove @Ref if present
-if [[ -z "$3" ]] ; then
+if [[ -n "$3" ]] ; then
   INPUT_LIST_MODIFIED="$( awk -F "$3" '{print $1}' <<< "$INPUT_LIST_MODIFIED" )"
 fi
 
