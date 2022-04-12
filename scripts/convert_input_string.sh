@@ -12,13 +12,13 @@ INPUT_LIST_MODIFIED=$(sed "$SED_STRING" <<< "$INPUT_LIST")
 
 # Remove @Ref if present
 if [[ -z "$3" ]] ; then
-  # Change special characters
-  # Needed for multi-line variable in github actions
-  INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//'%'/'%25'}"
-  INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//$'\n'/'%0A'}"
-  INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//$'\r'/'%0D'}"
-else
   INPUT_LIST_MODIFIED="$( awk -F "$3" '{print $1}' <<< "$INPUT_LIST_MODIFIED" )"
 fi
+
+# Change special characters
+# Needed for multi-line variable in github actions
+INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//'%'/'%25'}"
+INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//$'\n'/'%0A'}"
+INPUT_LIST_MODIFIED="${INPUT_LIST_MODIFIED//$'\r'/'%0D'}"
 
 echo "$INPUT_LIST_MODIFIED"
