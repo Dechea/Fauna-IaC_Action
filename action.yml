@@ -59,6 +59,7 @@ runs:
       id: convert_domains_at
       run: |
         GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
+        GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;\n;,;g" )
         echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_AT"
       shell: bash
 
