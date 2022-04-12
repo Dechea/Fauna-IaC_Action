@@ -37,7 +37,7 @@ runs:
       shell: bash
 
     - name: "Convert input repository string to domain name"
-      id: convert_domains
+      id: convert_github_domains
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
@@ -62,7 +62,7 @@ runs:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
     - run: |
-        echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
+        echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
 
     #### ELSE IF - REF IS SET
@@ -84,7 +84,7 @@ runs:
         string: ${{ steps.convert_domains_at.outputs.domains_modified }}
         split-by: "${{ steps.convert_domains.outputs.domain }}/"
     - run: |
-        echo "spliting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
+        echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
 
     #### END
