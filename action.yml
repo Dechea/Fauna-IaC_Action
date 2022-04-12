@@ -109,15 +109,15 @@ runs:
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
 
-#
-#    - name: Checkout all domain repos
-#      uses: vweevers/multi-checkout-action@v1
-#      with:
-#        token: ${{ inputs.GITHUB_PAT }}
-#        repositories: |
-#          ${{ steps.convert_domains.outputs.domains_modified }}
-#        path: repos
-#
+
+    - name: Checkout all domain repos
+      uses: vweevers/multi-checkout-action@v1
+      with:
+        token: ${{ inputs.GITHUB_PAT }}
+        repositories: |
+          ${{ inputs.GITHUB_REPOSITORIES }}
+        path: repos
+
 #    - name: Merge GraphQL schema files
 #      run: |
 #        cd repos/${{ steps.convert_domains.outputs.domain }}
