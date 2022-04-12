@@ -1,4 +1,4 @@
-# Fauna-Domain-IaC_-Action-
+# Fauna-Domain-Driven-IaC
 
 This Action facilitates the use of [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate) in context of a domain based CI/CD workflow. Plus it supports applying a graphql schema to the database.
 
@@ -11,11 +11,10 @@ Add the following snippet to the "steps" section of your `main.yml` file:
 ```yaml
 steps:
   - name: Run Fauna Migration
-    uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
+    uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
     with:
       GITHUB_PAT: '<string>'
-      FAUNA_SECRET: '<string>'
-      BRANCH: 'string'
+      FAUNA_TOKEN: '<string>'
       DATABASE: '<string>'
       DOMAINS: '<string>' # JSON Array
       FAUNA_DOMAIN: 'string'
@@ -26,11 +25,11 @@ steps:
 | Variable              | Usage                                                       |
 | --------------------- | ----------------------------------------------------------- |
 | GITHUB_PAT (*)        | The key used to access your github repos. |
-| FAUNA_SECRET (*)      | The key used to access your Fauna database. |
-| BRANCH (*)            | The branch that will be fetched from the other repos and deployed to the database. eg. "Develop", "Release", "Master", ... |
+| FAUNA_TOKEN (*)       | The token used to access your Fauna database. |
 | DATABASE (*)          | The target database where you want to apply the migration. |
-| DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository> |
+| DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository>@<branch> |
 | FAUNA_DOMAIN (*)      | The domain where your database are hosted e.g. db.fauna.com, db.eu.fauna.com etc.|
+| MUTATION_TEST         | Runs mutations on top of your unit tests  (Only Jest supported ATM). See [Stryker-Mutator](https://stryker-mutator.io/) |
 | DEBUG                 | Turn on extra debug information. Default: `false`. |
 
 _(*) = required variable._
@@ -89,14 +88,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-Domain-IaC_-Action-@v0.1.0
+        uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
         with:
-          GITHUB_PAT: GITHUB_PAT
-          FAUNA_SECRET: FAUNA_SECRET
+          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
+          FAUNA_TOKEN: ${{ secrets.FAUNA_Token }}
           BRANCH: 'Staging'
           DATABASE: 'Staging'
-          PRODUCT_DOMAINS: '["Dechea/USER_Schema","Dechea/INVOICE_Schema"]'
+          PRODUCT_DOMAINS: 'Dechea/USER_Schema@Master,Dechea/INVOICE_Schema@Develop]'
           FAUNA_DOMAIN: 'db.fauna.com'
+          MUTATION_TEST: 'true'
 ```
   
 ## How it works
