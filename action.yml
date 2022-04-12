@@ -65,10 +65,13 @@ runs:
       shell: bash
 
     - name: "Print out modified variables"
+      id: print_repo_names
       run: |
         echo "Input DOMAINS_MODIFIED: ${{ steps.convert_domains.outputs.domains_modified }}"
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_domains.outputs.domain }}"
         echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
+        GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
+        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: Checkout all domain repos
@@ -76,8 +79,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
-          $GITHUB_REPOSITORY_NAMES
+          ${{ steps.print_repo_names.outputs.repository_names }}
         path: repos
 #
 #    - name: Merge GraphQL schema files
