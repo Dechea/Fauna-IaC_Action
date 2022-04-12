@@ -60,7 +60,7 @@ runs:
       if: "!contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
       with:
         string: ${{ inputs.GITHUB_REPOSITORIES }}
-        split-by: "${{ steps.convert_domains.outputs.domain }}/"
+        split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
     - run: |
         echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
@@ -82,7 +82,7 @@ runs:
       if: "contains( ${{ inputs.GITHUB_REPOSITORIES }}, '@' )"
       with:
         string: ${{ steps.convert_domains_at.outputs.domains_modified }}
-        split-by: "${{ steps.convert_domains.outputs.domain }}/"
+        split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
     - run: |
         echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
       shell: bash
