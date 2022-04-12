@@ -1,27 +1,24 @@
 name: 'Fauna Domain - Infrastructure as code'
 description: 'Greet someone'
 inputs:
+  GITHUB_REPOSITORIES:
+    description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or organization/name@ref where ref is a branch name, tag or SHA to checkout.
+                    Eg. "Dechea/exampleRepository, Dechea/AnotherExampleRepository@v2"'
+    required: true
   GITHUB_PAT:
     description: 'The key used to access your github repos.'
     required: true
-  FAUNA_SECRET:
-    description: 'The key used to access your Fauna database.'
-    required: true
-  GITHUB_REPOSITORIES:
-    description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or organization/name@ref where ref is a branch name, tag or SHA to checkout.
-                  Eg. "Dechea/exampleRepository, Dechea/AnotherExampleRepository@v2"'
-    required: true
-  DATABASE:
+  FAUNA_DATABASE:
     description: 'The target database where you want to apply the migration.'
     required: true
     default: 'Prod'
-  DOMAINS:
-    description: 'JSON Array with the repository names of the domains.'
-    required: true
   FAUNA_DOMAIN:
     description: 'The domain where your database are hosted. Eg. db.fauna.com, db.eu.fauna.com etc.'
     required: true
     default: 'db.eu.fauna.com'
+  FAUNA_SECRET:
+    description: 'The key used to access your Fauna database.'
+    required: true
   VERBOSE:
     description: 'Turn on extra debug information.'
     required: false
@@ -56,8 +53,8 @@ runs:
       id: convert_domains
       if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
-        DOMAINS_MODIFIED=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
-        echo "::set-output name=domains_modified::$DOMAINS_MODIFIED"
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: "Remove domain string from modified input string - without [@Ref]"
@@ -83,9 +80,9 @@ runs:
       id: convert_domains_at
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
-        GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
-        GITHUB_REPOSITORY_NAMES_AT=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;\n;,;g" )
-        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_AT"
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ GITHUB_REPOSITORY_NAMES }} "s;\n;,;g" )
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
     - name: "Remove domain string from modified input string - with [@Ref]"
@@ -104,7 +101,7 @@ runs:
     - name: "Print out modified variables"
       id: print_repo_names
       run: |
-        echo "Input DOMAINS_MODIFIED: ${{ steps.convert_domains.outputs.domains_modified }}"
+        echo "Input DOMAINS_MODIFIED: ${{ steps.convert_github_domains.outputs.domains_modified }}"
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_domains.outputs.domain }}"
         echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
         echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split-at.outputs.*, '') }}"
