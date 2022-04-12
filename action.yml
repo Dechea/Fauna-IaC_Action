@@ -55,7 +55,7 @@ runs:
         GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
         echo "domain: ${{ steps.convert_domains.outputs.domain }}/"
         echo "Input GITHUB_REPOSITORY_NAMES: ${{ inputs.GITHUB_REPOSITORIES }}"
-        echo "Testing split part: ${{ steps.split.outputs._0 }}"
+        echo "Testing split part: ${{ steps.split.outputs._1 }}"
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
