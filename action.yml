@@ -92,7 +92,6 @@ runs:
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
         GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
-        echo "In Between GITHUB_REPOSITORY_NAMES_REF: ${GITHUB_REPOSITORY_NAMES_REF}"
         GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh "${GITHUB_REPOSITORY_NAMES_REF}" "s;\n;,;g")
         GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//','/''}"
         GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//'%0A'/''}"
@@ -117,13 +116,9 @@ runs:
       id: print_repo_names
       run: |
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_github_domains.outputs.domain }}"
-        echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
-        echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split_ref.outputs.*, ',') }}"
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
-        # echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
         GITHUB_REPOSITORY_NAMES_2="${GITHUB_REPOSITORY_NAMES_2:1}"
-        echo "Input GITHUB_REPOSITORY_NAMES Test: ${GITHUB_REPOSITORY_NAMES_2}"
         INPUT_STR=${{ inputs.GITHUB_REPOSITORIES }}
         SUB='@'
         if [[ "$INPUT_STR" == *"$SUB"* ]]; then
