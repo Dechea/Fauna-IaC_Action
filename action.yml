@@ -80,7 +80,10 @@ runs:
       id: convert_domains_ref
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       run: |
-        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
+        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
+        echo "In Between GITHUB_REPOSITORY_NAMES_REF: ${GITHUB_REPOSITORY_NAMES_REF}"
+        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh $GITHUB_REPOSITORY_NAMES_REF "s;\n;,;g")
+        echo "GITHUB_REPOSITORY_NAMES_REF: ${GITHUB_REPOSITORY_NAMES_REF}"
         echo "::set-output name=domains_modified_ref::$GITHUB_REPOSITORY_NAMES_REF"
       shell: bash
 
