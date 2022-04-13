@@ -124,19 +124,19 @@ runs:
           ${{ steps.convert_domains.outputs.domains_modified }}
         path: repos
 
-    # - name: Merge GraphQL schema files
-    #   run: |
-    #     cd repos/${{ steps.convert_domains.outputs.domain }}
-    #     ls -lA
-    #     mkdir -p schema
-    #     IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-    #     for index in "${!repoNames[@]}"
-    #     do
-    #       echo "repo: ${repoNames[index]}"
-    #       cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-    #     done
-    #     echo "Successfully merge schema files"
-    #   shell: bash
+    - name: Merge GraphQL schema files
+      run: |
+        cd repos/${{ steps.convert_domains.outputs.domain }}
+        ls -lA
+        mkdir -p schema
+        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+        for index in "${!repoNames[@]}"
+        do
+          echo "repo: ${repoNames[index]}"
+          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+        done
+        echo "Successfully merge schema files"
+      shell: bash
 
     # - name: Upload Schema File
     #   run: |
