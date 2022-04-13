@@ -33,8 +33,8 @@ runs:
         echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
       shell: bash
 
-    - name: "Test step"
-      id: "replace_for_repo"
+    - name: "Convert input repository string"
+      id: "convert_repo_str"
       run: |
         REPO_NAMES=${{ inputs.GITHUB_REPOSITORIES }}
         REPO_NAMES="${REPO_NAMES//','/'%0A'}"
@@ -48,7 +48,7 @@ runs:
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
         echo "::set-output name=domain::$GITHUB_DOMAIN"
-        echo "correct repo names : ${{ steps.replace_for_repo.outputs.repo_names }}"
+        echo "correct repo names : ${{ steps.convert_repo_str.outputs.repo_names }}"
       shell: bash
 
     #### IF - NO REF IS SET
@@ -131,7 +131,7 @@ runs:
       with:
         token: ${{ inputs.GITHUB_PAT }}
         repositories: |
-          ${{ steps.convert_domains.outputs.domains_modified }}
+          ${{ steps.convert_repo_str.outputs.repo_names }}
         path: repos
 
     - name: Merge GraphQL schema files
