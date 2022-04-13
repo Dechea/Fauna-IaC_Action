@@ -106,56 +106,57 @@ runs:
       run: |
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_github_domains.outputs.domain }}"
         echo "Input GITHUB_REPOSITORY_NAMES: ${{ join(steps.split.outputs.*, '') }}"
-        echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split_ref.outputs.*, '') }}"
+        echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split_ref.outputs.*, ',') }}"
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, '') }}
+        # echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split_ref.outputs.*, ',') }}"
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
 
-    - name: Checkout all domain repos
-      uses: vweevers/multi-checkout-action@v1
-      with:
-        token: ${{ inputs.GITHUB_PAT }}
-        repositories: |
-          ${{ steps.convert_domains.outputs.domains_modified }}
-        path: repos
+    # - name: Checkout all domain repos
+    #   uses: vweevers/multi-checkout-action@v1
+    #   with:
+    #     token: ${{ inputs.GITHUB_PAT }}
+    #     repositories: |
+    #       ${{ steps.convert_domains.outputs.domains_modified }}
+    #     path: repos
 
-    - name: Merge GraphQL schema files
-      run: |
-        cd repos/${{ steps.convert_domains.outputs.domain }}
-        ls -lA
-        mkdir -p schema
-        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-        for index in "${!repoNames[@]}"
-        do
-          echo "repo: ${repoNames[index]}"
-          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-        done
-        echo "Successfully merge schema files"
-      shell: bash
+    # - name: Merge GraphQL schema files
+    #   run: |
+    #     cd repos/${{ steps.convert_domains.outputs.domain }}
+    #     ls -lA
+    #     mkdir -p schema
+    #     IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+    #     for index in "${!repoNames[@]}"
+    #     do
+    #       echo "repo: ${repoNames[index]}"
+    #       cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+    #     done
+    #     echo "Successfully merge schema files"
+    #   shell: bash
 
     # - name: Upload Schema File
     #   run: |
     #     curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
     #   shell: bash
 
-    - name: Merge all test files
-      run: |
-        ls -lA
-        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-        for index in "${!repoNames[@]}"
-        do
-          rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/__mocks__/ __mocks__/
-          rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/constants/ constants/
-          rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/src/ fauna/src/
-          rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
-          rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
-          [ -d "repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
-          rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/util/ util/
-        done
-        echo "Successfully copied necessary files for testing"
-      shell: bash
+    # - name: Merge all test files
+    #   run: |
+    #     ls -lA
+    #     IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+    #     for index in "${!repoNames[@]}"
+    #     do
+    #       rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/__mocks__/ __mocks__/
+    #       rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/constants/ constants/
+    #       rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/src/ fauna/src/
+    #       rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
+    #       rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
+    #       [ -d "repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
+    #       rsync -avuP repos/${{ steps.convert_domains.outputs.domain }}/${repoNames[index]}/util/ util/
+    #     done
+    #     echo "Successfully copied necessary files for testing"
+    #   shell: bash
 
     # - name: Setup Node.js
     #   id: cache-node-modules
