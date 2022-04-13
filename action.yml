@@ -49,7 +49,6 @@ runs:
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
         echo "::set-output name=domain::$GITHUB_DOMAIN"
         echo "GITHUB_DOMAIN: ${GITHUB_DOMAIN}"
-        echo "correct repo names : ${{ steps.convert_repo_str.outputs.repo_names }}"
       shell: bash
 
     #### IF - NO REF IS SET
@@ -143,8 +142,6 @@ runs:
         cd repos/${{ steps.convert_github_domains.outputs.domain }}
         ls -lA
         mkdir -p schema
-        TEST_VAR=${{ steps.print_repo_names.outputs.repository_names }}
-        echo "Repo name Test: ${TEST_VAR}"
         IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
         for index in "${!repoNames[@]}"
         do
