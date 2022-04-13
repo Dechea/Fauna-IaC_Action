@@ -180,19 +180,12 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-#    - name: Install Node.js and test
-#      run: |
-#        npm install
-#        npm run test
-#      shell: bash
-
-    - name: Create pseudo coverage report
+    - name: Install Node.js and test
       run: |
-        mkdir coverage
-        touch coverage/est.txt
-        touch coverage/test2.txt
+        npm install
+        npm run test
       shell: bash
-#
+
     - name: Upload coverage files
       uses: actions/upload-artifact@v3
       with:
