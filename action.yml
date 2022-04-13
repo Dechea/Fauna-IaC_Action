@@ -126,7 +126,7 @@ runs:
         echo "Input GITHUB_REPOSITORY_NAMES Test: ${GITHUB_REPOSITORY_NAMES_2}"
         STR={{ inputs.GITHUB_REPOSITORIES }}
         SUB='@'
-        if [[ "$STR" == *"$SUB"* ]]; then
+        if [[ "${STR}" == *"$SUB"* ]]; then
           TEST_VAR=${GITHUB_REPOSITORY_NAMES_1}
         fi
         # TEST_VAR="1 == 1 ? ${GITHUB_REPOSITORY_NAMES_1} : 'a'"
