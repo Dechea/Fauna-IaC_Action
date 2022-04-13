@@ -124,45 +124,40 @@ runs:
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
         GITHUB_REPOSITORY_NAMES_2="${GITHUB_REPOSITORY_NAMES_2:1}"
         echo "Input GITHUB_REPOSITORY_NAMES Test: ${GITHUB_REPOSITORY_NAMES_2}"
-        STR=${{ inputs.GITHUB_REPOSITORIES }}
+        INPUT_STR=${{ inputs.GITHUB_REPOSITORIES }}
         SUB='@'
-        if [[ "$STR" == *"$SUB"* ]]; then
-          TEST_VAR=${GITHUB_REPOSITORY_NAMES_2}
+        if [[ "$INPUT_STR" == *"$SUB"* ]]; then
+          GITHUB_REPOSITORY_NAMES=${GITHUB_REPOSITORY_NAMES_2}
         else 
-          TEST_VAR=${GITHUB_REPOSITORY_NAMES_1}
+          GITHUB_REPOSITORY_NAMES=${GITHUB_REPOSITORY_NAMES_1}
         fi
-        # TEST_VAR="1 == 1 ? ${GITHUB_REPOSITORY_NAMES_1} : 'a'"
-        # TEST_VAR=$(( true ? "$GITHUB_REPOSITORY_NAMES_1" : "nope" )) 
-        # TEST_VAR=$(( "contains(inputs.GITHUB_REPOSITORIES, '@' )" ? ${GITHUB_REPOSITORY_NAMES_2} : ${GITHUB_REPOSITORY_NAMES_1} ))  
-        echo "Test_VAR: ${TEST_VAR}"
-        # [[ "contains(inputs.GITHUB_REPOSITORIES, '@' )" ]] && echo "GITHUB_REPOSITORY_NAMES_2: ${{ join(steps.split_ref.outputs.*, ',') }}" || echo "GITHUB_REPOSITORY_NAMES_1: ${{ join(steps.split.outputs.*, '') }}"
-        # [[ "contains(inputs.GITHUB_REPOSITORIES, '@' )" ]] && echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2" || echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
-        # echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
+        echo "GITHUB_REPOSITORY_NAMES: ${GITHUB_REPOSITORY_NAMES}"
+        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
-    # - name: Checkout all domain repos
-    #   uses: vweevers/multi-checkout-action@v1
-    #   with:
-    #     token: ${{ inputs.GITHUB_PAT }}
-    #     repositories: |
-    #       ${{ steps.convert_repo_str.outputs.repo_names }}
-    #     path: repos
+    - name: Checkout all domain repos
+      uses: vweevers/multi-checkout-action@v1
+      with:
+        token: ${{ inputs.GITHUB_PAT }}
+        repositories: |
+          ${{ steps.convert_repo_str.outputs.repo_names }}
+        path: repos
 
-    # - name: Merge GraphQL schema files
-    #   run: |
-    #     cd repos/${{ steps.convert_github_domains.outputs.domain }}
-    #     ls -lA
-    #     mkdir -p schema
-    #     TEST_VAR=${{ steps.print_repo_names.outputs.repository_names }}
-    #     echo "Repo name Test: ${TEST_VAR}"
-    #     # IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-    #     # for index in "${!repoNames[@]}"
-    #     # do
-    #     #   echo "repo: ${repoNames[index]}"
-    #     #   cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-    #     # done
-    #     echo "Successfully merge schema files"
-    #   shell: bash
+    - name: Merge GraphQL schema files
+      run: |
+        cd repos/${{ steps.convert_github_domains.outputs.domain }}
+        ls -lA
+        mkdir -p schema
+        TEST_VAR=${{ steps.print_repo_names.outputs.repository_names }}
+        echo "Repo name Test: ${TEST_VAR}"
+        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+        for index in "${!repoNames[@]}"
+        do
+          echo "repo: ${repoNames[index]}"
+          cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+        done
+        echo "Successfully merge schema files"
+      shell: bash
 
     # - name: Upload Schema File
     #   run: |
