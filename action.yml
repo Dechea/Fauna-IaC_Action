@@ -33,12 +33,21 @@ runs:
         echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
       shell: bash
 
+    - name: "Test step"
+      id: "replace_for_repo"
+      run: |
+        REPO_NAMES="${${{ inputs.GITHUB_REPOSITORIES }}//','/'%0A'}"
+        echo "REPO_NAMES: ${REPO_NAMES}"
+        echo "::set-output name=repo_names::$REPO_NAMES"
+      shell: bash
+
     - name: "Convert input repository string to domain name"
       id: convert_github_domains
       run: |
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
         echo "::set-output name=domain::$GITHUB_DOMAIN"
+        echo "correct repo names : ${{ steps.replace_for_repo.outputs.repo_names }}"
       shell: bash
 
     #### IF - NO REF IS SET
@@ -86,7 +95,7 @@ runs:
         GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//','/''}"
         GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//'%0A'/''}"
         echo "GITHUB_REPOSITORY_NAMES_REF: ${GITHUB_REPOSITORY_NAMES_REF}"
-        echo "::set-output name=domains_modified_ref::$GITHUB_REPOSITORY_NAMES_REF"
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
       shell: bash
 
     - name: "Remove domain string from modified input string - with [@Ref]"
@@ -94,7 +103,7 @@ runs:
       id: split_ref
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       with:
-        string: ${{ steps.convert_domains_ref.outputs.domains_modified_ref }}
+        string: ${{ steps.convert_domains_ref.outputs.domains_modified }}
         split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
     - run: |
         echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
