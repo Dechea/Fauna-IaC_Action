@@ -164,22 +164,22 @@ runs:
     #     curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
     #   shell: bash
 
-    # - name: Merge all test files
-    #   run: |
-    #     ls -lA
-    #     IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-    #     for index in "${!repoNames[@]}"
-    #     do
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/__mocks__/ __mocks__/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/constants/ constants/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/src/ fauna/src/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
-    #       [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/util/ util/
-    #     done
-    #     echo "Successfully copied necessary files for testing"
-    #   shell: bash
+    - name: Merge all test files
+      run: |
+        ls -lA
+        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+        for index in "${!repoNames[@]}"
+        do
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/__mocks__/ __mocks__/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/constants/ constants/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/src/ fauna/src/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
+          [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/util/ util/
+        done
+        echo "Successfully copied necessary files for testing"
+      shell: bash
 
     # - name: Setup Node.js
     #   id: cache-node-modules
