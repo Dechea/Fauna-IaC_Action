@@ -127,6 +127,7 @@ runs:
         TEST_VAR=$(( true ? "$GITHUB_REPOSITORY_NAMES_1" : "nope" )) 
         # TEST_VAR=$(( "contains(inputs.GITHUB_REPOSITORIES, '@' )" ? ${GITHUB_REPOSITORY_NAMES_2} : ${GITHUB_REPOSITORY_NAMES_1} ))  
         echo "Test_VAR: ${TEST_VAR}"
+        [[ "contains(inputs.GITHUB_REPOSITORIES, '@' )" ]] && echo "GITHUB_REPOSITORY_NAMES_2: $GITHUB_REPOSITORY_NAMES_2" || echo "GITHUB_REPOSITORY_NAMES_1: $GITHUB_REPOSITORY_NAMES_1"
         # [[ "contains(inputs.GITHUB_REPOSITORIES, '@' )" ]] && echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2" || echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
         # echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
