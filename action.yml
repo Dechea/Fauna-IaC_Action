@@ -111,7 +111,8 @@ runs:
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
-        # echo "Input GITHUB_REPOSITORY_NAMES_AT: ${{ join(steps.split_ref.outputs.*, '') }}"
+        GITHUB_REPOSITORY_NAMES_2="${GITHUB_REPOSITORY_NAMES_2:1}"
+        echo "Input GITHUB_REPOSITORY_NAMES Test: ${GITHUB_REPOSITORY_NAMES_2}"
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2"
       shell: bash
 
