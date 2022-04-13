@@ -124,7 +124,12 @@ runs:
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
         GITHUB_REPOSITORY_NAMES_2="${GITHUB_REPOSITORY_NAMES_2:1}"
         echo "Input GITHUB_REPOSITORY_NAMES Test: ${GITHUB_REPOSITORY_NAMES_2}"
-        TEST_VAR="1 == 1 ? ${GITHUB_REPOSITORY_NAMES_1} : 'a'"
+        STR='GNU/Linux is an operating system'
+        SUB='Linux'
+        if [[ "$STR" == *"$SUB"* ]]; then
+          TEST_VAR=${GITHUB_REPOSITORY_NAMES_1}
+        fi
+        # TEST_VAR="1 == 1 ? ${GITHUB_REPOSITORY_NAMES_1} : 'a'"
         # TEST_VAR=$(( "contains(inputs.GITHUB_REPOSITORIES, '@' )" ? ${GITHUB_REPOSITORY_NAMES_2} : ${GITHUB_REPOSITORY_NAMES_1} ))  
         echo "Test_VAR: ${TEST_VAR}"
         # [[ "contains(inputs.GITHUB_REPOSITORIES, '@' )" ]] && echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_2" || echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES_1"
