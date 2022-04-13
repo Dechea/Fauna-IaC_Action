@@ -191,43 +191,43 @@ runs:
       with:
         name: coverage-files
         path: coverage/**
-#
-#    - name: Create Fauna migration files
-#      run: |
-#        npm install
-#        npm run fauna:generate
-#        echo "Successfully created fauna migration"
-#      shell: bash
-#      env:
-#        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
-#        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
-#
-#    - name: Check Fauna migration state
-#      run: |
-#        npm install
-#        npm run fauna:state
-#      shell: bash
-#      env:
-#        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-#        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
-#
-#    - name: Copy Fauna migration inside correct dirctory
-#      run: |
-#        mkdir -p migrations/${{ inputs.DATABASE }}
-#        rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
-#        echo "Successfully copied fauna migration"
-#      shell: bash
-#
-#    - name: Apply Fauna migration
-#      run: |
-#        npm install
-#        npm run fauna:apply
-#        echo "Successfully applied fauna migration"
-#      shell: bash
-#      env:
-#        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-#        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
-#
+
+    - name: Create Fauna migration files
+      run: |
+        npm install
+        npm run fauna:generate
+        echo "Successfully created fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
+
+    - name: Check Fauna migration state
+      run: |
+        npm install
+        npm run fauna:state
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+
+    - name: Copy Fauna migration inside correct dirctory
+      run: |
+        mkdir -p migrations/${{ inputs.DATABASE }}
+        rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
+        echo "Successfully copied fauna migration"
+      shell: bash
+
+    - name: Apply Fauna migration
+      run: |
+        npm install
+        npm run fauna:apply
+        echo "Successfully applied fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+
 #    - name: Commit Fauna migration folder
 #      uses: EndBug/add-and-commit@v9
 #      with:
