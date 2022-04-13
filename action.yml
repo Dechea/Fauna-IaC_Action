@@ -36,7 +36,8 @@ runs:
     - name: "Test step"
       id: "replace_for_repo"
       run: |
-        REPO_NAMES="${ ${{ inputs.GITHUB_REPOSITORIES }}//','/'%0A'}"
+        REPO_NAMES=${{ inputs.GITHUB_REPOSITORIES }}
+        REPO_NAMES="${REPO_NAMES//','/'%0A'}"
         echo "REPO_NAMES: ${REPO_NAMES}"
         echo "::set-output name=repo_names::$REPO_NAMES"
       shell: bash
