@@ -151,10 +151,10 @@ runs:
         echo "Successfully merge schema files"
       shell: bash
 
-    # - name: Upload Schema File
-    #   run: |
-    #     curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
-    #   shell: bash
+    - name: Upload Schema File
+      run: |
+        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
+      shell: bash
 
     - name: Merge all test files
       run: |
@@ -213,8 +213,8 @@ runs:
 
     - name: Copy Fauna migration inside correct dirctory
       run: |
-        mkdir -p migrations/${{ inputs.DATABASE }}
-        rsync -avuP fauna/migrations/ migrations/${{ inputs.DATABASE }}/
+        mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
+        rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
         echo "Successfully copied fauna migration"
       shell: bash
 
@@ -231,5 +231,5 @@ runs:
     - name: Commit Fauna migration folder
       uses: EndBug/add-and-commit@v9
       with:
-        add: migrations/${{ inputs.DATABASE }}/
+        add: migrations/${{ inputs.FAUNA_DATABASE }}/
         message: 'updated migration [skip ci]'
