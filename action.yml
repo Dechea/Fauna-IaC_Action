@@ -232,6 +232,4 @@ runs:
       uses: EndBug/add-and-commit@v9
       with:
         add: migrations/${{ inputs.DATABASE }}/
-        #  author_name: Bhanu Agrawal
-        #  author_email: bhanu.agrawal@dechea.com
         message: 'updated migration [skip ci]'
