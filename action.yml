@@ -148,7 +148,6 @@ runs:
           echo "repo: ${repoNames[index]}"
           cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
         done
-        cat schema/schema.gql
         echo "Successfully merge schema files"
       shell: bash
 
@@ -174,63 +173,63 @@ runs:
         echo "Successfully copied necessary files for testing"
       shell: bash
 
-    # - name: Setup Node.js
-    #   id: cache-node-modules
-    #   uses: actions/setup-node@v2
-    #   with:
-    #     node-version: '14'
-    #     cache: 'npm'
+    - name: Setup Node.js
+      id: cache-node-modules
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+        cache: 'npm'
 
-    # - name: Install Node.js and test
-    #   run: |
-    #     npm install
-    #     npm run test
-    #   shell: bash
+    - name: Install Node.js and test
+      run: |
+        npm install
+        npm run test
+      shell: bash
 
-    # - name: Upload coverage files
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: coverage-files
-    #     path: coverage/**
+    - name: Upload coverage files
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-files
+        path: coverage/**
 
-    # - name: Create Fauna migration files
-    #   run: |
-    #     npm install
-    #     npm run fauna:generate
-    #     echo "Successfully created fauna migration"
-    #   shell: bash
-    #   env:
-    #     FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
-    #     FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
+    - name: Create Fauna migration files
+      run: |
+        npm install
+        npm run fauna:generate
+        echo "Successfully created fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_SECRET }}
 
-    # - name: Check Fauna migration state
-    #   run: |
-    #     npm install
-    #     npm run fauna:state
-    #   shell: bash
-    #   env:
-    #     FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-    #     FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+    - name: Check Fauna migration state
+      run: |
+        npm install
+        npm run fauna:state
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
 
-    # - name: Copy Fauna migration inside correct dirctory
-    #   run: |
-    #     mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
-    #     rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
-    #     echo "Successfully copied fauna migration"
-    #   shell: bash
+    - name: Copy Fauna migration inside correct dirctory
+      run: |
+        mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
+        rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
+        echo "Successfully copied fauna migration"
+      shell: bash
 
-    # - name: Apply Fauna migration
-    #   run: |
-    #     npm install
-    #     npm run fauna:apply
-    #     echo "Successfully applied fauna migration"
-    #   shell: bash
-    #   env:
-    #     FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-    #     FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+    - name: Apply Fauna migration
+      run: |
+        npm install
+        npm run fauna:apply
+        echo "Successfully applied fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
 
-    # - name: Commit Fauna migration folder
-    #   uses: EndBug/add-and-commit@v9
-    #   with:
-    #     add: migrations/${{ inputs.FAUNA_DATABASE }}/
-    #     message: 'updated migration [skip ci]'
+    - name: Commit Fauna migration folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: migrations/${{ inputs.FAUNA_DATABASE }}/
+        message: 'updated migration [skip ci]'
