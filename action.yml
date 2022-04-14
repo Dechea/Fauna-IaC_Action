@@ -66,7 +66,7 @@ runs:
       shell: bash
 
     - name: "Remove domain string from modified input string - without [@Ref]"
-      uses: rishabhgupta/split-by@v1
+      uses: rishabhgupta/split-by@v2
       id: split
       if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
       with:
@@ -97,7 +97,7 @@ runs:
       shell: bash
 
     - name: "Remove domain string from modified input string - with [@Ref]"
-      uses: rishabhgupta/split-by@v1
+      uses: rishabhgupta/split-by@v2
       id: split_ref
       if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
       with:
