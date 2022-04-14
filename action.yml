@@ -113,13 +113,16 @@ runs:
       id: print_repo_names
       run: |
         chmod u+x ${{ github.action_path }}/scripts/contains_substring_in_string.sh
-        echo "Input GITHUB_DOMAIN: ${{ steps.convert_github_domains.outputs.domain }}"
-        GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
-        GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
-        GITHUB_REPOSITORY_NAMES_2="${GITHUB_REPOSITORY_NAMES_2:1}"
-
         IS_CONTAINS=$( ${{ github.action_path }}/scripts/contains_substring_in_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "@" )
-        [[ "$IS_CONTAINS" == "true" ]] && GITHUB_REPOSITORY_NAMES="$GITHUB_REPOSITORY_NAMES_2" || GITHUB_REPOSITORY_NAMES="$GITHUB_REPOSITORY_NAMES_1"
+        
+        if [[ "$IS_CONTAINS" == "true" ]]; then
+          GITHUB_REPOSITORY_NAMES=${{ join(steps.split_ref.outputs.*, ',') }}
+          GITHUB_REPOSITORY_NAMES="${GITHUB_REPOSITORY_NAMES:1}"
+        else 
+          GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
+        fi
+
+        echo "$GITHUB_REPOSITORY_NAMES"
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
 
