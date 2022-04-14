@@ -154,7 +154,7 @@ runs:
 
     - name: Upload Schema File
       run: |
-        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/schema/schema.gql"
+        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
       shell: bash
 
     - name: Merge all test files
