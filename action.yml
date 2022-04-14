@@ -112,6 +112,7 @@ runs:
     - name: "Print out modified variables"
       id: print_repo_names
       run: |
+        chmod u+x ${{ github.action_path }}/scripts/contains_substring_in_string.sh
         echo "Input GITHUB_DOMAIN: ${{ steps.convert_github_domains.outputs.domain }}"
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
