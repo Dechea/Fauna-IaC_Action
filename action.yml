@@ -38,7 +38,6 @@ runs:
       run: |
         REPO_NAMES=${{ inputs.GITHUB_REPOSITORIES }}
         REPO_NAMES="${REPO_NAMES//','/'%0A'}"
-        echo "REPO_NAMES: ${REPO_NAMES}"
         echo "::set-output name=repo_names::$REPO_NAMES"
       shell: bash
 
@@ -48,7 +47,6 @@ runs:
         chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
         GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
         echo "::set-output name=domain::$GITHUB_DOMAIN"
-        echo "GITHUB_DOMAIN: ${GITHUB_DOMAIN}"
       shell: bash
 
     #### IF - NO REF IS SET
@@ -154,6 +152,7 @@ runs:
     - name: Upload Schema File
       run: |
         curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
+        echo "Schema uploaded successfully"
       shell: bash
 
     - name: Merge all test files
@@ -170,7 +169,7 @@ runs:
           [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
           rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/util/ util/
         done
-        echo "Successfully copied necessary files for testing"
+        echo "Successfully copied necessary files for testing and generating migrations"
       shell: bash
 
     - name: Setup Node.js
@@ -184,6 +183,7 @@ runs:
       run: |
         npm install
         npm run test
+        echo "Test cases run successfully"
       shell: bash
 
     - name: Upload coverage files
