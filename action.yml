@@ -116,13 +116,16 @@ runs:
         GITHUB_REPOSITORY_NAMES_1=${{ join(steps.split.outputs.*, '') }}
         GITHUB_REPOSITORY_NAMES_2=${{ join(steps.split_ref.outputs.*, ',') }}
         GITHUB_REPOSITORY_NAMES_2="${GITHUB_REPOSITORY_NAMES_2:1}"
-        INPUT_STR=${{ inputs.GITHUB_REPOSITORIES }}
-        SUB='@'
-        if [[ "$INPUT_STR" == *"$SUB"* ]]; then
-          GITHUB_REPOSITORY_NAMES=${GITHUB_REPOSITORY_NAMES_2}
-        else 
-          GITHUB_REPOSITORY_NAMES=${GITHUB_REPOSITORY_NAMES_1}
-        fi
+        # INPUT_STR=${{ inputs.GITHUB_REPOSITORIES }}
+        # SUB='@'
+        # if [[ "$INPUT_STR" == *"$SUB"* ]]; then
+        #   GITHUB_REPOSITORY_NAMES=${GITHUB_REPOSITORY_NAMES_2}
+        # else 
+        #   GITHUB_REPOSITORY_NAMES=${GITHUB_REPOSITORY_NAMES_1}
+        # fi
+        IS_CONTAINS=$( ${{ github.action_path }}/scripts/contains_substring_in_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "@" )
+        echo "IS_CONTAINS"
+        [[ "$IS_CONTAINS" == "true" ]] && GITHUB_REPOSITORY_NAMES="$GITHUB_REPOSITORY_NAMES_2" || GITHUB_REPOSITORY_NAMES="$GITHUB_REPOSITORY_NAMES_1"
         echo "GITHUB_REPOSITORY_NAMES: ${GITHUB_REPOSITORY_NAMES}"
         echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
       shell: bash
