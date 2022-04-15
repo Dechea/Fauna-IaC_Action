@@ -16,8 +16,9 @@ steps:
       GITHUB_PAT: '<string>'
       FAUNA_TOKEN: '<string>'
       DATABASE: '<string>'
-      DOMAINS: '<string>' # JSON Array
-      FAUNA_DOMAIN: 'string'
+      DOMAINS: '<string>' 
+      FAUNA_DOMAIN: '<string>'
+      # MUTATION_TEST: '<boolean>' # Optional
       # DEBUG: "<boolean>" # Optional
 ```
 ## Variables
@@ -79,6 +80,7 @@ Good to know: If you follow these pattern, it's also relatively easy to have a c
 
 ## Examples
 
+### Deployment to Production database 
 ```yaml  
 name: Build and Deploy
 on: [push]
@@ -90,12 +92,30 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
         with:
-          GITHUB_PAT: ${{ secrets.GITHUB_PAT }}
-          FAUNA_TOKEN: ${{ secrets.FAUNA_Token }}
-          BRANCH: 'Staging'
-          DATABASE: 'Staging'
-          PRODUCT_DOMAINS: 'Dechea/USER_Schema@Master,Dechea/INVOICE_Schema@Develop]'
-          FAUNA_DOMAIN: 'db.fauna.com'
+          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@master'
+          GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
+          FAUNA_DATABASE: 'Production'
+          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_PRODUCTION }} # token for Production database
+          MUTATION_TEST: 'true'
+```
+### Deployment to Domain Development database  
+```yaml  
+name: Build and Deploy
+on: [push]
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Fauna Migration
+        uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
+        with:
+          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@master'
+          GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
+          FAUNA_DATABASE: 'USR_User'
+          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_USR }} # token for USR_User database
           MUTATION_TEST: 'true'
 ```
   
@@ -119,6 +139,6 @@ The pipe is maintained by ci-team@dechea.com.
 
 If you’re reporting an issue, please include:
 
-- the version of the pipe
+- the version of the action
 - relevant logs and error messages
 - steps to reproduce
