@@ -1,5 +1,8 @@
-name: 'Fauna Domain - Infrastructure as code'
-description: 'Greet someone'
+name: 'Fauna Domain Driven IaC'
+description: 'Domain driven Infrastructure as Code for Fauna databases'
+branding:
+    icon: "box"
+    color: "purple"
 inputs:
   GITHUB_REPOSITORIES:
     description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or organization/name@ref where ref is a branch name, tag or SHA to checkout.
