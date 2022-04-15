@@ -20,7 +20,7 @@ Add the following snippet to the "steps" section of your `main.yml` file:
 ```yaml
 steps:
   - name: Run Fauna Migration
-    uses: Dechea/Fauna-IaC_Action@main
+    uses: Dechea/Fauna-IaC_Action@v1
     with:
       GITHUB_PAT: '<string>'
       FAUNA_TOKEN: '<string>'
@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-IaC_Action@main
+        uses: Dechea/Fauna-IaC_Action@v1
         with:
           GITHUB_REPOSITORIES: 'Dechea/Fauna_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
@@ -130,7 +130,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-IaC_Action@main
+        uses: Dechea/Fauna-IaC_Action@v1
         with:
           GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
@@ -149,7 +149,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-IaC_Action@main
+        uses: Dechea/Fauna-IaC_Action@v1
         with:
           GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
@@ -169,7 +169,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-IaC_Action@main
+        uses: Dechea/Fauna-IaC_Action@v1
         with:
           GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
