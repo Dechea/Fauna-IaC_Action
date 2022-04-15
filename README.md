@@ -46,6 +46,14 @@ _(*) = required variable._
 
 ## Prerequisites
   
+Depending if you're following a Mono or Domain Driven repository approach, follow the corresponding prerequisite paths.
+  
+**Mono Repo:** 
+One repo - one database (Traditional approach)
+  
+**Domain driven repositories:** 
+You will run all business logic in one databases, so that you have the full performance power of Fauna and every team has everytime a fully working database with all domains (Theoratically no need anymore for a staging environment). But every team has an own repository with their own responsibility, so your teams can develop and ship features independently. Trying to get the best of both worlds - autonomy and performance.
+  
 ### Mono Repository
 
 #### 1. Follow the steps from [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate) 
@@ -53,9 +61,6 @@ _(*) = required variable._
 The PAT must have read & write access to the repositories. In the case of private repositories you'll want to create a machine user, add the machine user to the repositories that you want to checkout and then generate a token for the machine user.
   
 ### Domain Driven Repository  
-
-You will run all business logic in one databases, so that you have the full performance power of Fauna and every team has everytime a fully working database with all domains (Theoratically no need anymore for a staging environment). 
-But we split the domains on the development side, so your teams can develop and ship features independently. Trying to get the best of both worlds.
 
 #### 1. Create in Fauna the domain relevant databases.
 
