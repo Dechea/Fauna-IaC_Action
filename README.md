@@ -111,7 +111,7 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
         with:
-          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@$GITHUB_REF'
+          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@$GITHUB_REF_NAME'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'USR_User'
           FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
