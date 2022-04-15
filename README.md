@@ -1,8 +1,17 @@
-# Fauna-Domain-Driven-IaC
+# Fauna-IaC
 
-This Action facilitates the use of [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate) in context of a domain based CI/CD workflow. Plus it supports applying a graphql schema to the database.
+This Action simplifies the use of [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate).
+It can be used to deploy a mono repo to Fauna,
+or it can be used to follow a Domain Driven approach with multiple repositories getting deployed to one database.
 
-Manages your Fauna graphql schema, UDFs, indexes, roles, collections & access providers in GitHub and uploads it afterwards to Fauna.
+Manages 
+- Graphql schema,
+- UDFs, 
+- Indexes, 
+- Roles, 
+- Collections 
+- Access providers 
+in GitHub and deploys it afterwards to Fauna.
 
 ## YAML Definition
 
@@ -11,7 +20,7 @@ Add the following snippet to the "steps" section of your `main.yml` file:
 ```yaml
 steps:
   - name: Run Fauna Migration
-    uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
+    uses: Dechea/Fauna-IaC_Action@main
     with:
       GITHUB_PAT: '<string>'
       FAUNA_TOKEN: '<string>'
@@ -36,11 +45,19 @@ steps:
 _(*) = required variable._
 
 ## Prerequisites
+  
+### Mono Repository
+
+#### 1. Follow the steps from [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate) 
+#### 2. Create a PAT (Personal access token)
+The PAT must have read & write access to the repositories. In the case of private repositories you'll want to create a machine user, add the machine user to the repositories that you want to checkout and then generate a token for the machine user.
+  
+### Domain Driven Repository  
 
 You will run all business logic in one databases, so that you have the full performance power of Fauna and every team has everytime a fully working database with all domains (Theoratically no need anymore for a staging environment). 
 But we split the domains on the development side, so your teams can develop and ship features independently. Trying to get the best of both worlds.
 
-### 1. Create in Fauna the domain relevant databases.
+#### 1. Create in Fauna the domain relevant databases.
 
 - One database for production
 - One child database for staging (Optional)
@@ -55,14 +72,14 @@ We have structured our databases in Fauna that way:
         - USR_User
         - INV_Invoice
 
-### 2. Create for every domain one repository in Bitbucket
+#### 2. Create for every domain one repository in GitHub
 
 Example:
 
 - Repo 1: USR_User
 - Repo 2: INV_Invoice
 
-### 3. Follow the prefix naming pattern for all ressources
+#### 3. Follow the prefix naming pattern for all ressources
 
 To achieve, that multiple teams can publish to one database, we have to follow a naming pattern to avoid merge conflicts because of duplicated collections, UDFs etc.
 We're working with a unique prefix for every domain e.g. USR for User or INV for Invoice and so on.
@@ -76,11 +93,14 @@ This pattern needs to be applied as a prefix to your ressources and divided by a
 - Repository name (e.g. "USR_Schema" or "USR_SomethingElse") (Optional)
 - Fauna domain databases (e.g. "USR_User" or "USR_SomethingElse") (Optional)
 
-Good to know: If you follow these pattern, it's also relatively easy to have a code coverage report for every domain independently. You can do a code coverage inclusion in every repo for the files that are starting with the prefix of your own domain and then publish it e.g. to sonarcloud.
+Good to know: If you follow these pattern, it's also relatively easy to have a code coverage report for every domain independently. You can do a code coverage inclusion in every repo for the files that are starting with the prefix of your own domain and then publish it e.g. to Sonarcloud.
+  
+#### 4. Create a PAT (Personal access token)
+The PAT must have read & write access to the repositories. In the case of private repositories you'll want to create a machine user, add the machine user to the repositories that you want to checkout and then generate a token for the machine user.
 
 ## Examples
 
-### Deployment to Production database 
+### **Mono Repo:** Deployment to Production database 
 ```yaml  
 name: Build and Deploy
 on: [push]
@@ -90,7 +110,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
+        uses: Dechea/Fauna-IaC_Action@main
+        with:
+          GITHUB_REPOSITORIES: 'Dechea/Fauna_Schema@master'
+          GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
+          FAUNA_DATABASE: 'Production'
+          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_PRODUCTION }} # token for Production database
+          MUTATION_TEST: 'true'
+```
+  
+### **Domain Repos:** Deployment to Production database 
+```yaml  
+name: Build and Deploy
+on: [push]
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Fauna Migration
+        uses: Dechea/Fauna-IaC_Action@main
         with:
           GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
@@ -99,7 +139,7 @@ jobs:
           FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_PRODUCTION }} # token for Production database
           MUTATION_TEST: 'true'
 ```
-### Deployment to Domain Development database  
+### **Domain Repos:** Deployment to Domain Development database  
 ```yaml  
 name: Build and Deploy
 on: [push]
@@ -109,30 +149,55 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run Fauna Migration
-        uses: Dechea/Fauna-Domain-Driven-IaC@v0.1.0
+        uses: Dechea/Fauna-IaC_Action@main
         with:
-          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@$GITHUB_REF_NAME'
+          GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
-          FAUNA_DATABASE: 'USR_User'
+          FAUNA_DATABASE: 'USR_User_Dev'
           FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
-          FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_USR }} # token for USR_User database
+          FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_USR }} # token for USR_User_Dev database
           MUTATION_TEST: 'true'
+```
+  
+### Get coverage report 
+```yaml  
+name: Build and Deploy
+on: [push]
+jobs:
+  build-and-deploy:
+    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Fauna Migration
+        uses: Dechea/Fauna-IaC_Action@main
+        with:
+          GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
+          GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
+          FAUNA_DATABASE: 'USR_User_Dev'
+          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_USR }} # token for USR_User_Dev database
+          MUTATION_TEST: 'true'
+  
+      - uses: actions/download-artifact@v3
+        name: Get coverage report artifact
+        with:
+          name: coverage-files
+          path: coverage
 ```
   
 ## How it works
 We have repositories created for every domain. Every repo has the structure defined by [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate). It includes collections, UDFs, Indexes, roles that are related to that domain. 
-But we're using only one database. So one repo can't apply simply their infrastructure to the database. Instead we have to assemble it first with all other domain repos, run the tests and then apply it to the database. This is what this pipe does.
+But we're using only one database. So one repo can't apply simply their infrastructure to the database. Instead we have to assemble it first with all other domain repos, run the tests and then apply it to the database. This is what this Action does.
 <br />
-For that we using the data provided in the "DOMAINS" variable. We clone the repository branches based on the ENV, merge it, apply it to the given DATABASE and run all the tests.
+For that we using the data provided in the "GITHUB_REPOSITORIES" variable. We clone the repositories, merge it, apply it to the given FAUNA_DATABASE and run all the tests.
 <br /><br />
-**How are we selecting the branches based on the ENV?**
-This is different for every environment
 
-- **Dev**: We pull from every repo the "Master" Branch except the repo that is currently running the pipe. From this repo we're using the branch that triggered the pipeline.
-    - e.g. We push code into the Feature Branch "feature/Delete-User" of the repo "USR_Schema". The pipe will clone the feature branch of the repo "USR_Schema and from all other repos the "Master" Branch.
-- **Staging**: We pull from every repo the "Staging" or "Release" Branch.
-- **Prod**: We pull from every repo the "Master" Branch.
+## TBD  
 
+- Bring support for multiple test runners (Jest, AVA, Mocha etc.)
+- Automatically code coverage upload to Sonarcloud, codecov etc.
+- Run test in parallel
+  
 ## Support
 If you’d like help with this pipe, or you have an issue or feature request, let us know.
 The pipe is maintained by ci-team@dechea.com.
