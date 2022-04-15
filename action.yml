@@ -1,6 +1,9 @@
 name: 'Fauna Domain - Infrastructure as code'
 description: 'Greet someone'
 inputs:
+  TEST_VAR:
+    description: 'Test var'
+    required: false
   GITHUB_REPOSITORIES:
     description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or organization/name@ref where ref is a branch name, tag or SHA to checkout.
                     Eg. "Dechea/exampleRepository, Dechea/AnotherExampleRepository@v2"'
@@ -31,6 +34,7 @@ runs:
       run: |
         echo "Input parameters: ${{ inputs.GITHUB_PAT }}"
         echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
+        echo "Input TEST_VAR: ${{ inputs.TEST_VAR }}"
       shell: bash
 
     # - name: "Convert input repository string"
