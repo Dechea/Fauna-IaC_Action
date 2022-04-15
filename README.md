@@ -203,6 +203,11 @@ For that we using the data provided in the "GITHUB_REPOSITORIES" variable. We cl
 - Automatically code coverage upload to Sonarcloud, codecov etc.
 - Run test in parallel
   
+## Q&A
+
+### 1. What happens if one domain introduce a breaking change?
+Currently the whole Action would fail, because we run all tests from all Domains. Only if all tests passing, the changes will be applied to production.
+  
 ## Support
 If you’d like help with this pipe, or you have an issue or feature request, let us know.
 The pipe is maintained by ci-team@dechea.com.
