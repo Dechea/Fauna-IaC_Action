@@ -202,6 +202,7 @@ For that we using the data provided in the "GITHUB_REPOSITORIES" variable. We cl
 - Bring support for multiple test runners (Jest, AVA, Mocha etc.)
 - Automatically code coverage upload to Sonarcloud, codecov etc.
 - Run test in parallel
+- Apply migration to multiple databases at once  
   
 ## Q&A
 
