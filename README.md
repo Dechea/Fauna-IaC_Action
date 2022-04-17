@@ -211,8 +211,8 @@ Currently the whole Action would fail, because we run all tests from all Domains
   
 ## Support
 If you’d like help with this pipe, or you have an issue or feature request, let us know.
-The pipe is maintained by ci-team@dechea.com.
-
+Pull requests are welcome!
+  
 If you’re reporting an issue, please include:
 
 - the version of the action
