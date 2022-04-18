@@ -219,7 +219,7 @@ runs:
       if: input.MUTATION_TEST
       run: |
         npm install
-        npm run test:stryker
+        npm run test:mutation
         echo "Mutated test cases run successfully"
       shell: bash
 
