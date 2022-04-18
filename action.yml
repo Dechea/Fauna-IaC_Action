@@ -175,7 +175,7 @@ runs:
 
     - name: Upload Schema File
       run: |
-        curl -X POST "https://graphql.eu.fauna.com/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
+        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
         echo "Schema uploaded successfully"
       shell: bash
 
@@ -224,7 +224,7 @@ runs:
       shell: bash
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
     - name: Check Fauna migration state
       run: |
@@ -233,9 +233,9 @@ runs:
       shell: bash
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
-    - name: Copy Fauna migration inside correct dirctory
+    - name: Copy Fauna migration inside correct directory
       run: |
         mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
         rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
@@ -250,7 +250,7 @@ runs:
       shell: bash
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
-        FAUNADB_DOMAIN: ${{ inputs.FAUNA_DOMAIN }}
+        FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
     - name: Commit Fauna migration folder
       uses: EndBug/add-and-commit@v9
