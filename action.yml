@@ -5,8 +5,9 @@ branding:
     color: "purple"
 inputs:
   GITHUB_REPOSITORIES:
-    description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or organization/name@ref where ref is a branch name, tag or SHA to checkout.
-                    Eg. "Dechea/exampleRepository, Dechea/AnotherExampleRepository@v2"'
+    description: 'Comma separated repositories in the form of organization/name (to checkout the default branch) or 
+                  organization/name@ref where ref is a branch name, tag or SHA to checkout.
+                  Eg. "Dechea/exampleRepository, Dechea/AnotherExampleRepository@v2"'
     required: true
   GITHUB_PAT:
     description: 'The key used to access your github repos.'
@@ -18,7 +19,7 @@ inputs:
   FAUNA_REGION:
     description: 'The domain where your database are hosted. 
                   Allowed values: us, eu, classic, preview
-                  Default value: eu'
+                  Default value: classic'
     required: false
     default: 'classic'
   FAUNA_SECRET:
