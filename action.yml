@@ -41,7 +41,7 @@ runs:
       id: get_fauna_urls
       run: |
         echo "Input fauna region: ${{ inputs.FAUNA_REGION }}"
-        if [[ ${{ inputs.FAUNA_REGION }} == "us" || ${{ inputs.FAUNA_REGION }} == "eu" || ${{ inputs.FAUNA_REGION }} == "classic" || ${{ inputs.FAUNA_REGION }} == "preview"]]; then
+        if [[ ${{ inputs.FAUNA_REGION }} != @(us|eu|classic|preview) ]]; then
             echo "Invalid input Fauna Region: ${{ inputs.FAUNA_REGION}}"
             echo "Doesn't match one of the allowed values: 'us, eu, classic, preview'!"
             echo "Aborting..."
