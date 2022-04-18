@@ -216,7 +216,7 @@ runs:
       shell: bash
 
     - name: Install Node.js and run stryker mutation test
-      if: input.MUTATION_TEST
+      if: inputs.MUTATION_TEST
       run: |
         npm install
         npm run test:mutation
