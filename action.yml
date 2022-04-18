@@ -208,12 +208,12 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-    - name: Install Node.js and test
-      run: |
-        npm install
-        npm run test
-        echo "Test cases run successfully"
-      shell: bash
+#    - name: Install Node.js and test
+#      run: |
+#        npm install
+#        npm run test
+#        echo "Test cases run successfully"
+#      shell: bash
 
     - name: Install Node.js and run stryker mutation test
       if: inputs.MUTATION_TEST
