@@ -53,6 +53,8 @@ runs:
             read -ra arr <<< "$FAUNA_URLS"
             FAUNA_DOMAIN="${arr[0]}"
             FAUNA_GRAPHQL_DOMAIN="${arr[1]}"
+            echo "FAUNA_DOMAIN: $FAUNA_DOMAIN"
+            echo "FAUNA_GRAPHQL_DOMAIN: $FAUNA_GRAPHQL_DOMAIN"
             echo "::set-output name=fauna_domain::${arr[0]}"
             echo "::set-output name=fauna_graphql_domain::${arr[1]}"
         fi
