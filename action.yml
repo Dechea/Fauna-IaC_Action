@@ -1,4 +1,4 @@
-name: 'Fauna Domain Driven IaC'
+name: 'Fauna IaC'
 description: 'Domain driven Infrastructure as Code for Fauna databases'
 branding:
     icon: "box"
