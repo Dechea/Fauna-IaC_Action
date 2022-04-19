@@ -50,13 +50,13 @@ runs:
       shell: bash
 
     - name: "Print out if true "
-      if: ${{ inputs.MUTATION_TEST == true }}
+      if: ${{ inputs.MUTATION_TEST == 'true' }}
       run: |
         echo "inputs.MUTATION_TEST == true"
       shell: bash
 
     - name: "Print out if false "
-      if: ${{ inputs.MUTATION_TEST == false }}
+      if: ${{ inputs.MUTATION_TEST == 'false' }}
       run: |
         echo "inputs.MUTATION_TEST == false"
       shell: bash
