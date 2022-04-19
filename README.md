@@ -26,21 +26,21 @@ steps:
       FAUNA_TOKEN: '<string>'
       DATABASE: '<string>'
       DOMAINS: '<string>' 
-      FAUNA_DOMAIN: '<string>'
+      FAUNA_REGION: '<string>'
       # MUTATION_TEST: '<boolean>' # Optional
       # DEBUG: "<boolean>" # Optional
 ```
 ## Variables
 
-| Variable              | Usage                                                       |
-| --------------------- | ----------------------------------------------------------- |
-| GITHUB_PAT (*)        | The key used to access your github repos. |
-| FAUNA_TOKEN (*)       | The token used to access your Fauna database. |
-| DATABASE (*)          | The target database where you want to apply the migration. |
-| DOMAINS (*)           | Array with the repository names of the domains. <organization>/<repository>@<branch> |
-| FAUNA_DOMAIN (*)      | The domain where your database are hosted EU, US, Global, Preview |
-| MUTATION_TEST         | Runs mutations on top of your unit tests  (Only Jest supported ATM). See [Stryker-Mutator](https://stryker-mutator.io/) |
-| DEBUG                 | Turn on extra debug information. Default: `false`. |
+| Variable           | Usage                                                                                                                   |
+| ------------------ |-------------------------------------------------------------------------------------------------------------------------|
+| GITHUB_PAT (*)     | The key used to access your github repos.                                                                               |
+| FAUNA_TOKEN (*)    | The token used to access your Fauna database.                                                                           |
+| DATABASE (*)       | The target database where you want to apply the migration.                                                              |
+| DOMAINS (*)        | Array with the repository names of the domains. <organization>/<repository>@<branch>                                    |
+| FAUNA_REGION       | The domain where your database are hosted EU, US, Classic, Preview                                                           |
+| MUTATION_TEST      | Runs mutations on top of your unit tests  (Only Jest supported ATM). See [Stryker-Mutator](https://stryker-mutator.io/) |
+| DEBUG              | Turn on extra debug information. Default: `false`.                                                                      |
 
 _(*) = required variable._
 
@@ -120,7 +120,7 @@ jobs:
           GITHUB_REPOSITORIES: 'Dechea/Fauna_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'Production'
-          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
           FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_PRODUCTION }} # token for Production database
           MUTATION_TEST: 'true'
 ```
@@ -140,7 +140,7 @@ jobs:
           GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'Production'
-          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
           FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_PRODUCTION }} # token for Production database
           MUTATION_TEST: 'true'
 ```
@@ -159,7 +159,7 @@ jobs:
           GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'USR_User_Dev'
-          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
           FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_USR }} # token for USR_User_Dev database
           MUTATION_TEST: 'true'
 ```
@@ -179,7 +179,7 @@ jobs:
           GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'USR_User_Dev'
-          FAUNA_DOMAIN: ${{ secrets.FAUNA_URL }} # e.g. db.eu.fauna.com
+          FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
           FAUNA_SECRET: ${{ secrets.FAUNA_TOKEN_USR }} # token for USR_User_Dev database
           MUTATION_TEST: 'true'
   
