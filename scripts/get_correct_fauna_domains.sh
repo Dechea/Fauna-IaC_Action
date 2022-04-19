@@ -3,7 +3,7 @@
 db_domain="db.fauna.com"
 graphql_domain="graphql.fauna.com"
 
-case "$1" in
+case "${1,,}" in
   "eu")
     db_domain="db.eu.fauna.com"
     graphql_domain="graphql.eu.fauna.com"
