@@ -61,8 +61,6 @@ runs:
         fi
       shell: bash
 
-# TODO: change FAUNA URLs
-
     - name: "Convert input repository string"
       id: convert_repo_str
       run: |
