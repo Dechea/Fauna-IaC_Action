@@ -17,13 +17,13 @@ inputs:
     required: true
     default: 'Prod'
   FAUNA_REGION:
-    description: 'The domain where your database are hosted. 
+    description: 'The domain where your databases are hosted. 
                   Allowed values: us, eu, classic, preview
                   Default value: classic'
     required: false
     default: 'classic'
-  FAUNA_SECRET:
-    description: 'The key used to access your Fauna database.'
+  FAUNA_TOKEN:
+    description: 'The token used to access your Fauna database.'
     required: true
   MUTATION_TEST:
     description: 'Run all fauna tests again with stryker.'
@@ -180,7 +180,7 @@ runs:
 
     - name: Upload Schema File
       run: |
-        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_SECRET }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
+        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
         echo "Schema uploaded successfully"
       shell: bash
 
@@ -236,7 +236,7 @@ runs:
         echo "Successfully created fauna migration"
       shell: bash
       env:
-        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
     - name: Check Fauna migration state
@@ -245,7 +245,7 @@ runs:
         npm run fauna:state
       shell: bash
       env:
-        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
     - name: Copy Fauna migration inside correct directory
@@ -262,7 +262,7 @@ runs:
         echo "Successfully applied fauna migration"
       shell: bash
       env:
-        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_SECRET }}
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
     - name: Commit Fauna migration folder
