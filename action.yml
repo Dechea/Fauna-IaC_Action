@@ -176,12 +176,6 @@ runs:
         echo "Successfully merge schema files"
       shell: bash
 
-    - name: Upload Schema File
-      run: |
-        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
-        echo "Schema uploaded successfully"
-      shell: bash
-
     - name: Merge all test files
       run: |
         ls -lA
@@ -262,6 +256,12 @@ runs:
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+
+    - name: Upload Schema File
+      run: |
+        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
+        echo "Schema uploaded successfully"
+      shell: bash
 
     - name: Commit Fauna migration folder
       uses: EndBug/add-and-commit@v9
