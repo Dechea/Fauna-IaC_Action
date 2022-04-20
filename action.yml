@@ -42,229 +42,229 @@ runs:
         echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
       shell: bash
 
-    # - name: "Check and get correct fauna URLs"
-    #   id: get_fauna_urls
-    #   run: |
-    #     echo "Input fauna region: ${{ inputs.FAUNA_REGION }}"
-    #     if [[ ${{ inputs.FAUNA_REGION }} != @(us|eu|classic|preview) ]]; then
-    #         echo "Invalid input Fauna Region: ${{ inputs.FAUNA_REGION}}"
-    #         echo "Doesn't match one of the allowed values: 'us, eu, classic, preview'!"
-    #         echo "Aborting..."
-    #         exit 128
-    #     else
-    #         chmod u+x ${{ github.action_path }}/scripts/get_correct_fauna_domains.sh
-    #         FAUNA_URLS=$( ${{ github.action_path }}/scripts/get_correct_fauna_domains.sh ${{ inputs.FAUNA_REGION }})
-    #         IFS=":"
-    #         read -ra arr <<< "$FAUNA_URLS"
-    #         echo "::set-output name=fauna_domain::${arr[0]}"
-    #         echo "::set-output name=fauna_graphql_domain::${arr[1]}"
-    #     fi
-    #   shell: bash
+    - name: "Check and get correct fauna URLs"
+      id: get_fauna_urls
+      run: |
+        echo "Input fauna region: ${{ inputs.FAUNA_REGION }}"
+        if [[ ${{ inputs.FAUNA_REGION }} != @(us|eu|classic|preview) ]]; then
+            echo "Invalid input Fauna Region: ${{ inputs.FAUNA_REGION}}"
+            echo "Doesn't match one of the allowed values: 'us, eu, classic, preview'!"
+            echo "Aborting..."
+            exit 128
+        else
+            chmod u+x ${{ github.action_path }}/scripts/get_correct_fauna_domains.sh
+            FAUNA_URLS=$( ${{ github.action_path }}/scripts/get_correct_fauna_domains.sh ${{ inputs.FAUNA_REGION }})
+            IFS=":"
+            read -ra arr <<< "$FAUNA_URLS"
+            echo "::set-output name=fauna_domain::${arr[0]}"
+            echo "::set-output name=fauna_graphql_domain::${arr[1]}"
+        fi
+      shell: bash
 
-    # - name: "Convert input repository string"
-    #   id: convert_repo_str
-    #   run: |
-    #     REPO_NAMES=${{ inputs.GITHUB_REPOSITORIES }}
-    #     REPO_NAMES="${REPO_NAMES//','/'%0A'}"
-    #     echo "::set-output name=repo_names::$REPO_NAMES"
-    #   shell: bash
+    - name: "Convert input repository string"
+      id: convert_repo_str
+      run: |
+        REPO_NAMES=${{ inputs.GITHUB_REPOSITORIES }}
+        REPO_NAMES="${REPO_NAMES//','/'%0A'}"
+        echo "::set-output name=repo_names::$REPO_NAMES"
+      shell: bash
 
-    # - name: "Convert input repository string to domain name"
-    #   id: convert_github_domains
-    #   run: |
-    #     chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
-    #     GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
-    #     echo "::set-output name=domain::$GITHUB_DOMAIN"
-    #   shell: bash
+    - name: "Convert input repository string to domain name"
+      id: convert_github_domains
+      run: |
+        chmod u+x ${{ github.action_path }}/scripts/convert_input_string.sh
+        GITHUB_DOMAIN=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;/.*;;g" )
+        echo "::set-output name=domain::$GITHUB_DOMAIN"
+      shell: bash
 
-    # #### IF - NO REF IS SET
+    #### IF - NO REF IS SET
 
-    # - name: "Logging - without [@Ref]"
-    #   if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
-    #   run: |
-    #     echo "Logging - without [@Ref]"
-    #   shell: bash
+    - name: "Logging - without [@Ref]"
+      if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      run: |
+        echo "Logging - without [@Ref]"
+      shell: bash
 
-    # - name: "Convert input repository string - without [@Ref]"
-    #   id: convert_domains
-    #   if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
-    #   run: |
-    #     GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
-    #     echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES"
-    #   shell: bash
+    - name: "Convert input repository string - without [@Ref]"
+      id: convert_domains
+      if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      run: |
+        GITHUB_REPOSITORY_NAMES=$( ${{ github.action_path }}/scripts/convert_input_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" )
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES"
+      shell: bash
 
-    # - name: "Remove domain string from modified input string - without [@Ref]"
-    #   uses: rishabhgupta/split-by@v2
-    #   id: split
-    #   if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
-    #   with:
-    #     string: ${{ inputs.GITHUB_REPOSITORIES }}
-    #     split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
-    # - run: |
-    #     echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
-    #   shell: bash
+    - name: "Remove domain string from modified input string - without [@Ref]"
+      uses: rishabhgupta/split-by@v2
+      id: split
+      if: "!contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      with:
+        string: ${{ inputs.GITHUB_REPOSITORIES }}
+        split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
+    - run: |
+        echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
+      shell: bash
 
-    # #### ELSE IF - REF IS SET
+    #### ELSE IF - REF IS SET
 
-    # - name: "Logging - with [@Ref]"
-    #   if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
-    #   run: |
-    #     echo "Logging - with [@Ref]"
-    #   shell: bash
+    - name: "Logging - with [@Ref]"
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      run: |
+        echo "Logging - with [@Ref]"
+      shell: bash
 
-    # - name: "Convert input repository string - with [@Ref]"
-    #   id: convert_domains_ref
-    #   if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
-    #   run: |
-    #     GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
-    #     GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh "${GITHUB_REPOSITORY_NAMES_REF}" "s;\n;,;g")
-    #     GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//','/''}"
-    #     GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//'%0A'/''}"
-    #     echo "GITHUB_REPOSITORY_NAMES_REF: ${GITHUB_REPOSITORY_NAMES_REF}"
-    #     echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
-    #   shell: bash
+    - name: "Convert input repository string - with [@Ref]"
+      id: convert_domains_ref
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      run: |
+        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh ${{ inputs.GITHUB_REPOSITORIES }} "s;,;\n;g" "@|," )
+        GITHUB_REPOSITORY_NAMES_REF=$( ${{ github.action_path }}/scripts/convert_input_string_.sh "${GITHUB_REPOSITORY_NAMES_REF}" "s;\n;,;g")
+        GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//','/''}"
+        GITHUB_REPOSITORY_NAMES_REF="${GITHUB_REPOSITORY_NAMES_REF//'%0A'/''}"
+        echo "GITHUB_REPOSITORY_NAMES_REF: ${GITHUB_REPOSITORY_NAMES_REF}"
+        echo "::set-output name=domains_modified::$GITHUB_REPOSITORY_NAMES_REF"
+      shell: bash
 
-    # - name: "Remove domain string from modified input string - with [@Ref]"
-    #   uses: rishabhgupta/split-by@v2
-    #   id: split_ref
-    #   if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
-    #   with:
-    #     string: ${{ steps.convert_domains_ref.outputs.domains_modified }}
-    #     split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
-    # - run: |
-    #     echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
-    #   shell: bash
+    - name: "Remove domain string from modified input string - with [@Ref]"
+      uses: rishabhgupta/split-by@v2
+      id: split_ref
+      if: "contains(inputs.GITHUB_REPOSITORIES, '@' )"
+      with:
+        string: ${{ steps.convert_domains_ref.outputs.domains_modified }}
+        split-by: "${{ steps.convert_github_domains.outputs.domain }}/"
+    - run: |
+        echo "splitting based on: ${{ steps.convert_domains.outputs.domain }}/ done successfully"
+      shell: bash
 
-    # #### END
+    #### END
 
-    # - name: "Print out modified variables"
-    #   id: print_repo_names
-    #   run: |
-    #     chmod u+x ${{ github.action_path }}/scripts/contains_substring_in_string.sh
-    #     IS_CONTAINS=$( ${{ github.action_path }}/scripts/contains_substring_in_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "@" )
+    - name: "Print out modified variables"
+      id: print_repo_names
+      run: |
+        chmod u+x ${{ github.action_path }}/scripts/contains_substring_in_string.sh
+        IS_CONTAINS=$( ${{ github.action_path }}/scripts/contains_substring_in_string.sh ${{ inputs.GITHUB_REPOSITORIES }} "@" )
 
-    #     if [[ "$IS_CONTAINS" == "true" ]]; then
-    #       GITHUB_REPOSITORY_NAMES=${{ join(steps.split_ref.outputs.*, ',') }}
-    #       GITHUB_REPOSITORY_NAMES="${GITHUB_REPOSITORY_NAMES:1}"
-    #     else
-    #       GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
-    #     fi
+        if [[ "$IS_CONTAINS" == "true" ]]; then
+          GITHUB_REPOSITORY_NAMES=${{ join(steps.split_ref.outputs.*, ',') }}
+          GITHUB_REPOSITORY_NAMES="${GITHUB_REPOSITORY_NAMES:1}"
+        else
+          GITHUB_REPOSITORY_NAMES=${{ join(steps.split.outputs.*, '') }}
+        fi
 
-    #     echo "$GITHUB_REPOSITORY_NAMES"
-    #     echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
-    #   shell: bash
+        echo "$GITHUB_REPOSITORY_NAMES"
+        echo "::set-output name=repository_names::$GITHUB_REPOSITORY_NAMES"
+      shell: bash
 
-    # - name: Checkout all domain repos
-    #   uses: vweevers/multi-checkout-action@v1
-    #   with:
-    #     token: ${{ inputs.GITHUB_PAT }}
-    #     repositories: |
-    #       ${{ steps.convert_repo_str.outputs.repo_names }}
-    #     path: repos
+    - name: Checkout all domain repos
+      uses: vweevers/multi-checkout-action@v1
+      with:
+        token: ${{ inputs.GITHUB_PAT }}
+        repositories: |
+          ${{ steps.convert_repo_str.outputs.repo_names }}
+        path: repos
 
-    # - name: Merge GraphQL schema files
-    #   run: |
-    #     chmod u+x ${{ github.action_path }}/scripts/merge_schema_files.sh
-    #     cd repos/${{ steps.convert_github_domains.outputs.domain }}
-    #     mkdir -p schema
-    #     IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-    #     for index in "${!repoNames[@]}"
-    #     do
-    #         echo "merging schema file for repo : ${repoNames[index]}"
-    #         cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-    #     done
-    #     echo "Successfully merge schema files"
-    #   shell: bash
+    - name: Merge GraphQL schema files
+      run: |
+        chmod u+x ${{ github.action_path }}/scripts/merge_schema_files.sh
+        cd repos/${{ steps.convert_github_domains.outputs.domain }}
+        mkdir -p schema
+        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+        for index in "${!repoNames[@]}"
+        do
+            echo "merging schema file for repo : ${repoNames[index]}"
+            cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
+        done
+        echo "Successfully merge schema files"
+      shell: bash
 
-    # - name: Upload Schema File
-    #   run: |
-    #     curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
-    #     echo "Schema uploaded successfully"
-    #   shell: bash
+    - name: Upload Schema File
+      run: |
+        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
+        echo "Schema uploaded successfully"
+      shell: bash
 
-    # - name: Merge all test files
-    #   run: |
-    #     ls -lA
-    #     IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-    #     for index in "${!repoNames[@]}"
-    #     do
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/__mocks__/ __mocks__/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/constants/ constants/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/src/ fauna/src/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
-    #       [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
-    #       rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/util/ util/
-    #     done
-    #     echo "Successfully copied necessary files for testing and generating migrations"
-    #   shell: bash
+    - name: Merge all test files
+      run: |
+        ls -lA
+        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
+        for index in "${!repoNames[@]}"
+        do
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/__mocks__/ __mocks__/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/constants/ constants/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/src/ fauna/src/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
+          [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
+          rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/util/ util/
+        done
+        echo "Successfully copied necessary files for testing and generating migrations"
+      shell: bash
 
-    # - name: Setup Node.js
-    #   id: cache-node-modules
-    #   uses: actions/setup-node@v3
-    #   with:
-    #     node-version: '14'
-    #     cache: 'npm'
+    - name: Setup Node.js
+      id: cache-node-modules
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14'
+        cache: 'npm'
 
-    # - name: Install Node.js and test
-    #   run: |
-    #     npm install
-    #     npm run test
-    #     echo "Test cases run successfully"
-    #   shell: bash
+    - name: Install Node.js and test
+      run: |
+        npm install
+        npm run test
+        echo "Test cases run successfully"
+      shell: bash
 
-    # - name: Install Node.js and run stryker mutation test
-    #   if: ${{ inputs.MUTATION_TEST == 'true' }}
-    #   run: |
-    #     npm install
-    #     npm run test:mutation
-    #     echo "Mutated test cases run successfully"
-    #   shell: bash
+    - name: Install Node.js and run stryker mutation test
+      if: ${{ inputs.MUTATION_TEST == 'true' }}
+      run: |
+        npm install
+        npm run test:mutation
+        echo "Mutated test cases run successfully"
+      shell: bash
 
-    # - name: Upload coverage files
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: coverage-files
-    #     path: coverage/**
+    - name: Upload coverage files
+      uses: actions/upload-artifact@v3
+      with:
+        name: coverage-files
+        path: coverage/**
 
-    # - name: Create Fauna migration files
-    #   run: |
-    #     npm install
-    #     npm run fauna:generate
-    #     echo "Successfully created fauna migration"
-    #   shell: bash
-    #   env:
-    #     FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
-    #     FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+    - name: Create Fauna migration files
+      run: |
+        npm install
+        npm run fauna:generate
+        echo "Successfully created fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
+        FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
-    # - name: Check Fauna migration state
-    #   run: |
-    #     npm install
-    #     npm run fauna:state
-    #   shell: bash
-    #   env:
-    #     FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
-    #     FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+    - name: Check Fauna migration state
+      run: |
+        npm install
+        npm run fauna:state
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
+        FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
-    # - name: Copy Fauna migration inside correct directory
-    #   run: |
-    #     mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
-    #     rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
-    #     echo "Successfully copied fauna migration"
-    #   shell: bash
+    - name: Copy Fauna migration inside correct directory
+      run: |
+        mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
+        rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
+        echo "Successfully copied fauna migration"
+      shell: bash
 
-    # - name: Apply Fauna migration
-    #   run: |
-    #     npm install
-    #     npm run fauna:apply
-    #     echo "Successfully applied fauna migration"
-    #   shell: bash
-    #   env:
-    #     FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
-    #     FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+    - name: Apply Fauna migration
+      run: |
+        npm install
+        npm run fauna:apply
+        echo "Successfully applied fauna migration"
+      shell: bash
+      env:
+        FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
+        FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
-    # - name: Commit Fauna migration folder
-    #   uses: EndBug/add-and-commit@v9
-    #   with:
-    #     add: migrations/${{ inputs.FAUNA_DATABASE }}/
-    #     message: 'updated migration [skip ci]'
+    - name: Commit Fauna migration folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: migrations/${{ inputs.FAUNA_DATABASE }}/
+        message: 'updated migration [skip ci]'
