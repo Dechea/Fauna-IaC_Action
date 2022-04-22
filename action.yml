@@ -25,6 +25,9 @@ inputs:
   FAUNA_TOKEN:
     description: 'The token used to access your Fauna database.'
     required: true
+  FAUNA_CHILD_DB:
+    description: 'The token used to access your Fauna child database used to run unit and integration tests.'
+    required: false
   MUTATION_TEST:
     description: 'Run all fauna tests again with stryker.'
     required: false
@@ -206,6 +209,8 @@ runs:
         npm run test
         echo "Test cases run successfully"
       shell: bash
+      env:
+        FAUNA_CHILD_DB: ${{ secrets.FAUNA_CHILD_DB }}
 
     - name: Install Node.js and run stryker mutation test
       if: ${{ inputs.MUTATION_TEST == 'true' }}
@@ -214,6 +219,8 @@ runs:
         npm run test:mutation
         echo "Mutated test cases run successfully"
       shell: bash
+      env:
+        FAUNA_CHILD_DB: ${{ secrets.FAUNA_CHILD_DB }}
 
     - name: Upload coverage files
       uses: actions/upload-artifact@v3
