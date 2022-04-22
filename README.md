@@ -123,7 +123,7 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-IaC_Action@v1
         with:
-          GITHUB_REPOSITORIES: 'Dechea/Fauna_Schema@master'
+          GITHUB_REPOSITORIES: 'Dechea/Fauna_Schema@main'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'Production'
           FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
@@ -143,7 +143,7 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-IaC_Action@v1
         with:
-          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master,Dechea/HES_Schema@master'
+          GITHUB_REPOSITORIES: 'Dechea/ORC_Schema@main,Dechea/USR_Schema@main,Dechea/CLS_Schema@main,Dechea/HES_Schema@main'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'Production'
           FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
@@ -162,7 +162,7 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-IaC_Action@v1
         with:
-          GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
+          GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@main,Dechea/USR_Schema@main,Dechea/CLS_Schema@main'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'USR_User_Dev'
           FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
@@ -182,7 +182,7 @@ jobs:
       - name: Run Fauna Migration
         uses: Dechea/Fauna-IaC_Action@v1
         with:
-          GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@master,Dechea/USR_Schema@master,Dechea/CLS_Schema@master'
+          GITHUB_REPOSITORIES: 'Dechea/HES_Schema@$GITHUB_REF_NAME,Dechea/ORC_Schema@main,Dechea/USR_Schema@main,Dechea/CLS_Schema@main'
           GITHUB_PAT: ${{ secrets.SCHEMA_PAT_GITHUB }}
           FAUNA_DATABASE: 'USR_User_Dev'
           FAUNA_REGION: 'eu' # selects the EU URLs for fauna: db.eu.fauna.com, graphql.eu.fauna.com
