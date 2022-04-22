@@ -210,7 +210,7 @@ runs:
         echo "Test cases run successfully"
       shell: bash
       env:
-        FAUNA_CHILD_DB: ${{ secrets.FAUNA_CHILD_DB }}
+        FAUNA_CHILD_DB: ${{ inputs.FAUNA_CHILD_DB }}
 
     - name: Install Node.js and run stryker mutation test
       if: ${{ inputs.MUTATION_TEST == 'true' }}
@@ -220,7 +220,7 @@ runs:
         echo "Mutated test cases run successfully"
       shell: bash
       env:
-        FAUNA_CHILD_DB: ${{ secrets.FAUNA_CHILD_DB }}
+        FAUNA_CHILD_DB: ${{ inputs.FAUNA_CHILD_DB }}
 
     - name: Upload coverage files
       uses: actions/upload-artifact@v3
