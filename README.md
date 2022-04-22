@@ -26,7 +26,8 @@ steps:
       FAUNA_TOKEN: '<string>'
       DATABASE: '<string>'
       DOMAINS: '<string>' 
-      FAUNA_REGION: '<string>'
+      # FAUNA_REGION: '<string>'
+      # FAUNA_CHILD_DB: '<string>'
       # MUTATION_TEST: '<boolean>' # Optional
       # DEBUG: "<boolean>" # Optional
 ```
@@ -38,7 +39,8 @@ steps:
 | FAUNA_TOKEN (*)    | The token used to access your Fauna database.                                                                           |
 | DATABASE (*)       | The target database where you want to apply the migration.                                                              |
 | DOMAINS (*)        | Array with the repository names of the domains. <organization>/<repository>@<branch>                                    |
-| FAUNA_REGION       | The domain where your databases are hosted 'eu', 'us', 'classic', 'preview'                                                           |
+| FAUNA_REGION       | The domain where your databases are hosted 'eu', 'us', 'classic', 'preview'                                             |
+| FAUNA_CHILD_DB     | The token used to access your Fauna child database used to run unit and integration tests.                              |
 | MUTATION_TEST      | Runs mutations on top of your unit tests  (Only Jest supported ATM). See [Stryker-Mutator](https://stryker-mutator.io/) |
 | DEBUG              | Turn on extra debug information. Default: `false`.                                                                      |
 
