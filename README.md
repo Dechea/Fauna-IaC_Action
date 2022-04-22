@@ -38,7 +38,7 @@ steps:
 | GITHUB_PAT (*)     | The key used to access your github repos.                                                                               |
 | FAUNA_TOKEN (*)    | The token used to access your Fauna database.                                                                           |
 | DATABASE (*)       | The target database where you want to apply the migration.                                                              |
-| DOMAINS (*)        | Array with the repository names of the domains. <organization>/<repository>@<branch>                                    |
+| DOMAINS (*)        | Comma separated list with the repository names of the domains. \<organization\>/\<repository\>@\<branch\>               |
 | FAUNA_REGION       | The domain where your databases are hosted 'eu', 'us', 'classic', 'preview'                                             |
 | FAUNA_CHILD_DB     | The token used to access your Fauna child database used to run unit and integration tests.                              |
 | MUTATION_TEST      | Runs mutations on top of your unit tests  (Only Jest supported ATM). See [Stryker-Mutator](https://stryker-mutator.io/) |
@@ -73,7 +73,7 @@ The PAT must have read & write access to the repositories. In the case of privat
 We have structured our databases in Fauna that way:
 
 <ul>
-  <li>ProductName</li>
+  <li>\<ProductName\></li>
   <ul>
     <li>Production</li>
     <li>Staging</li>
@@ -207,7 +207,7 @@ For that we using the data provided in the "GITHUB_REPOSITORIES" variable. We cl
 
 ## TBD  
 
-- Bring support for multiple test runners (Jest, AVA, Mocha etc.)
+- Bring support for multiple test runners (Jest :white_check_mark:, AVA :x:, Mocha :x: etc.)
 - Automatically code coverage upload to Sonarcloud, codecov etc.
 - Run test in parallel
 - Apply migration to multiple databases at once  
