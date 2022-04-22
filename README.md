@@ -70,12 +70,18 @@ The PAT must have read & write access to the repositories. In the case of privat
 
 We have structured our databases in Fauna that way:
 
-- <ProductName>
-    - Production
-    - Staging
-    - Domains
-        - USR_User
-        - INV_Invoice
+<ul>
+  <li>ProductName</li>
+  <ul>
+    <li>Production</li>
+    <li>Staging</li>
+    <li>Domains</li>
+    <ul>
+      <li>USR_User</li>
+      <li>INV_Invoice</li>
+    </ul> 
+  </ul> 
+</ul>  
 
 #### 2. Create for every domain one repository in GitHub
 
