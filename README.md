@@ -4,14 +4,19 @@ This Action simplifies the use of [fauna-schema-migrate](https://github.com/faun
 It can be used to deploy a mono repo to Fauna,
 or it can be used to follow a Domain Driven approach with multiple repositories getting deployed to one database.
 
-Manages 
-- Graphql schema,
-- UDFs, 
-- Indexes, 
-- Roles, 
-- Collections 
-- Access providers 
-in GitHub and deploys it afterwards to Fauna.
+Manages the following ressources in GitHub and deploys it afterwards to Fauna:
+<ul>
+  <li>Graphql schema*</li>
+  <li>UDFs</li>
+  <li>Indexes</li>
+  <li>Roles</li>
+  <li>Collections</li>
+  <li>Access providers</li>
+</ul>
+
+
+
+\* We added simple Grapqhlql schema support on top of [fauna-schema-migrate](https://github.com/fauna-labs/fauna-schema-migrate), that uses the Fauna [/import](https://docs.fauna.com/fauna/current/api/graphql/endpoints) endpoint with ["merge"](https://docs.fauna.com/fauna/current/api/graphql/endpoints#modes) mode. The schema.gql file needs to be at the root level of your repository.
 
 ## YAML Definition
 
@@ -70,20 +75,16 @@ The PAT must have read & write access to the repositories. In the case of privat
 - One child database for staging (Optional)
 - One child database for each domain e.g. Dev_User, Dev_Invoice
 
-We have structured our databases in Fauna that way:
+We have structured our databases in Fauna that way: 
 
-<ul>
-  <li>\<ProductName\></li>
-  <ul>
-    <li>Production</li>
-    <li>Staging</li>
-    <li>Domains</li>
-    <ul>
-      <li>USR_User</li>
-      <li>INV_Invoice</li>
-    </ul> 
-  </ul> 
-</ul>  
+| \<ProductName\>* <br/>
+|-- Production <br/>
+|---- Staging <br/>
+|---- Domains* <br/>
+|------ USR_User <br/>
+|------ INV_Invoice <br/>
+
+\* Empty database - only needed for structure
 
 #### 2. Create for every domain one repository in GitHub
 
@@ -216,6 +217,9 @@ For that we using the data provided in the "GITHUB_REPOSITORIES" variable. We cl
 
 ### 1. What happens if one domain introduce a breaking change?
 Currently the whole Action would fail, because we run all tests from all Domains. Only if all tests passing, the changes will be applied to production.
+
+### 2. Where do I need to put my GraphQL schema?
+Your GraphQL schema needs to be put at the root level of your repository.
   
 ## Support
 If you’d like help with this pipe, or you have an issue or feature request, let us know.
