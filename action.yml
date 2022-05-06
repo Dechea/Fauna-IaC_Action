@@ -247,14 +247,14 @@ runs:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
 
-    - name: Copy Fauna migration inside correct directory
-      run: |
-        mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
-        rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
-        echo "Successfully copied fauna migration"
-        ls -lA
-        ls -lA migrations/${{ inputs.FAUNA_DATABASE }}/
-      shell: bash
+    # - name: Copy Fauna migration inside correct directory
+    #   run: |
+    #     mkdir -p migrations/${{ inputs.FAUNA_DATABASE }}
+    #     rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
+    #     echo "Successfully copied fauna migration"
+    #     ls -lA
+    #     ls -lA migrations/${{ inputs.FAUNA_DATABASE }}/
+    #   shell: bash
 
     - name: Apply Fauna migration
       run: |
@@ -275,5 +275,5 @@ runs:
     - name: Commit Fauna migration folder
       uses: EndBug/add-and-commit@v9
       with:
-        add: migrations/${{ inputs.FAUNA_DATABASE }}/
+        add: fauna/migrations/${{ inputs.FAUNA_DATABASE }}/
         message: 'updated migration [skip ci]'
