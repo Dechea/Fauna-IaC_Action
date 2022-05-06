@@ -191,7 +191,7 @@ runs:
           rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/resources/ fauna/resources/
           rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/tests/ fauna/tests/
           [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/util/ fauna/util/
-          [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/migrations/${{ inputs.FAUNA_DATABASE }}" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/migrations/${{ inputs.FAUNA_DATABASE }} fauna/migrations/${{ inputs.FAUNA_DATABASE }}
+          [ -d "repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/migrations/${{ inputs.FAUNA_DATABASE }}/" ] && rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/fauna/migrations/${{ inputs.FAUNA_DATABASE }}/ fauna/migrations/${{ inputs.FAUNA_DATABASE }}/
           rsync -avuP repos/${{ steps.convert_github_domains.outputs.domain }}/${repoNames[index]}/util/ util/
         done
         echo "Successfully copied necessary files for testing and generating migrations"
@@ -256,6 +256,7 @@ runs:
         npm run fauna:apply
         echo "Successfully applied fauna migration"
         ls -lA fauna/migrations/
+        ls -lA fauna/migrations/${{ inputs.FAUNA_DATABASE }}/
       shell: bash
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
