@@ -253,6 +253,7 @@ runs:
         rsync -avuP fauna/migrations/ migrations/${{ inputs.FAUNA_DATABASE }}/
         echo "Successfully copied fauna migration"
         ls -lA
+        ls -lA migrations/${{ inputs.FAUNA_DATABASE }}/
       shell: bash
 
     - name: Apply Fauna migration
