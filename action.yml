@@ -237,6 +237,7 @@ runs:
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+        FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
 
     - name: Check Fauna migration state
       run: |
@@ -246,6 +247,7 @@ runs:
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+        FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
 
     # - name: Copy Fauna migration inside correct directory
     #   run: |
@@ -265,6 +267,7 @@ runs:
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
+        FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
 
     - name: Upload Schema File
       run: |
