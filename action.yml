@@ -255,9 +255,6 @@ runs:
         npm install
         npm run fauna:apply
         echo "Successfully applied fauna migration"
-        ls -lA fauna/migrations/
-        ls -lA fauna/migrations/${{ inputs.FAUNA_DATABASE }}/
-        ls -lA fauna/util/
       shell: bash
       env:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
