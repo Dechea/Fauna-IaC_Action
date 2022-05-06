@@ -272,8 +272,8 @@ runs:
         echo "Schema uploaded successfully"
       shell: bash
 
-    # - name: Commit Fauna migration folder
-    #   uses: EndBug/add-and-commit@v9
-    #   with:
-    #     add: migrations/${{ inputs.FAUNA_DATABASE }}/
-    #     message: 'updated migration [skip ci]'
+    - name: Commit Fauna migration folder
+      uses: EndBug/add-and-commit@v9
+      with:
+        add: migrations/${{ inputs.FAUNA_DATABASE }}/
+        message: 'updated migration [skip ci]'
