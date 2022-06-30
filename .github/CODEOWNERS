@@ -1,0 +1,28 @@
+# These owners will be the default owners for everything in
+# the repo. Unless a later match takes precedence,
+# @madhavKD will be requested for
+# review when someone opens a pull request.
+*               @madhavKD
+
+# Typescript
+*.ts            @firehudson
+
+
+# Graphql
+*.gql           @firehudson
+
+
+# Markdown
+*.md            @mmailaender
+*.mdx           @mmailaender
+
+
+# Github
+.github/        @mmailaender
+
+
+# Configurations
+CODEOWNERS      @mmailaender
+embold.yaml     @mmailaender
+renovate.json   @mmailaender
+sonar-project.properties  @mmailaender
