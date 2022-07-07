@@ -213,6 +213,12 @@ runs:
       env:
         FAUNA_CHILD_DB: ${{ inputs.FAUNA_CHILD_DB }}
 
+    - name: Check and validate eslint
+      run: |
+        npm install
+        npm run eslint:validate --if-present
+      shell: bash
+
     - name: Install Node.js and run stryker mutation test
       if: ${{ inputs.MUTATION_TEST == 'true' }}
       run: |
