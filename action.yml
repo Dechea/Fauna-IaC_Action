@@ -42,7 +42,6 @@ runs:
   steps:
 
     #### ESLINT check only for the repo where the workflow was started
-
     - name: Checkout source code
       uses: actions/checkout@v3
 
@@ -50,6 +49,7 @@ runs:
       run: |
         npm install
         npm run eslint:validate --if-present
+        echo "ESLint validation run successfully"
       shell: bash
 
     - name: "Print out input variables passed"
@@ -284,4 +284,4 @@ runs:
       with:
         add: fauna/migrations/${{ inputs.FAUNA_DATABASE }}/
         message: 'updated migration [skip ci]'
-        commit: --no-verify
+        commit: '--no-verify'
