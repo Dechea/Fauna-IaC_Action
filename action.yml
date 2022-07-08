@@ -40,6 +40,18 @@ inputs:
 runs:
   using: "composite"
   steps:
+
+    #### ESLINT check only for the repo where the workflow was started
+
+    - name: Checkout source code
+      uses: actions/checkout@v3
+
+    - name: Check and validate eslint
+      run: |
+        npm install
+        npm run eslint:validate --if-present
+      shell: bash
+
     - name: "Print out input variables passed"
       run: |
         echo "Input repositories: ${{ inputs.GITHUB_REPOSITORIES }}"
@@ -212,12 +224,6 @@ runs:
       shell: bash
       env:
         FAUNA_CHILD_DB: ${{ inputs.FAUNA_CHILD_DB }}
-
-    - name: Check and validate eslint
-      run: |
-        npm install
-        npm run eslint:validate --if-present
-      shell: bash
 
     - name: Install Node.js and run stryker mutation test
       if: ${{ inputs.MUTATION_TEST == 'true' }}
