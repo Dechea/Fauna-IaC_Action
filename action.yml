@@ -284,3 +284,4 @@ runs:
       with:
         add: fauna/migrations/${{ inputs.FAUNA_DATABASE }}/
         message: 'updated migration [skip ci]'
+        commit: --no-verify
