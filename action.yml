@@ -49,6 +49,20 @@ runs:
     - name: Checkout source code
       uses: actions/checkout@v3
 
+    - name: init bit.dev
+      if: ${{ env.BIT_TOKEN != '' }}
+      run: |
+        echo "Adding bit.dev to npm registry"
+        npm config set @bit:registry https://node.bit.dev
+        npm config set @dechea:registry=https://node.bit.dev
+        npm config set @teambit:registry=https://node.bit.dev
+        npm config set //node.bit.dev/:_authToken ${BIT_TOKEN}
+        npm config set //node.bit.cloud/:_authToken ${BIT_TOKEN}
+        echo "Completed adding bit.dev to npm registry"
+      shell: bash
+      env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
+
     - name: Check and validate eslint
       run: |
         npm install
