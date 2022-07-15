@@ -28,6 +28,10 @@ inputs:
   FAUNA_CHILD_DB:
     description: 'The token used to access your Fauna child database used to run unit and integration tests.'
     required: false
+  BIT_TOKEN:
+    description: 'The token used to access your bit.dev instance.
+      Managed by Doppler'
+    required: false
   MUTATION_TEST:
     description: 'Run all fauna tests again with stryker.'
     required: false
@@ -215,6 +219,19 @@ runs:
       with:
         node-version: '14'
         cache: 'npm'
+
+    - name: init bit.dev
+      if: ${{ env.BIT_TOKEN != '' }}
+      run: |
+        echo "Adding bit.dev to npm registry"
+        npm config set @bit:registry https://node.bit.dev
+        npm config set @dechea:registry=https://node.bit.dev
+        npm config set @teambit:registry=https://node.bit.dev
+        npm config set //node.bit.dev/:_authToken ${BIT_TOKEN}
+        npm config set //node.bit.cloud/:_authToken ${BIT_TOKEN}
+        echo "Completed adding bit.dev to npm registry"
+      env:
+        BIT_TOKEN: ${{ secrets.BIT_TOKEN }}
 
     - name: Install Node.js and test
       run: |
