@@ -230,8 +230,9 @@ runs:
         npm config set //node.bit.dev/:_authToken ${BIT_TOKEN}
         npm config set //node.bit.cloud/:_authToken ${BIT_TOKEN}
         echo "Completed adding bit.dev to npm registry"
+      shell: bash
       env:
-        BIT_TOKEN: ${{ secrets.BIT_TOKEN }}
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
 
     - name: Install Node.js and test
       run: |
