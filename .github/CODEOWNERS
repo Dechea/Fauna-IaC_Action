@@ -19,6 +19,7 @@
 
 # Github
 .github/        @mmailaender
+action.yml      @mmailaender
 
 
 # Configurations
