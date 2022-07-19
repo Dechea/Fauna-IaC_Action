@@ -220,8 +220,6 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version: '14'
-      env:
-        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
 
     - name: Install Node.js and test
       run: |
