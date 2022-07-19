@@ -221,6 +221,8 @@ runs:
       with:
         node-version: '14'
         cache: 'npm'
+      env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
 
     - name: Install Node.js and test
       run: |
