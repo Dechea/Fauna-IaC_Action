@@ -49,26 +49,14 @@ runs:
     - name: Checkout source code
       uses: actions/checkout@v3
 
-    - name: init bit.dev
-      if: ${{ env.BIT_TOKEN != '' }}
-      run: |
-        echo "Adding bit.dev to npm registry"
-        npm config set @bit:registry https://node.bit.dev
-        npm config set @dechea:registry=https://node.bit.dev
-        npm config set @teambit:registry=https://node.bit.dev
-        npm config set //node.bit.dev/:_authToken ${BIT_TOKEN}
-        npm config set //node.bit.cloud/:_authToken ${BIT_TOKEN}
-        echo "Completed adding bit.dev to npm registry"
-      shell: bash
-      env:
-        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
-
     - name: Check and validate eslint
       run: |
         npm install
         npm run eslint:validate --if-present
         echo "ESLint validation run successfully"
       shell: bash
+      env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
 
     - name: "Print out input variables passed"
       run: |
@@ -234,20 +222,6 @@ runs:
         node-version: '14'
         cache: 'npm'
 
-    - name: init bit.dev
-      if: ${{ env.BIT_TOKEN != '' }}
-      run: |
-        echo "Adding bit.dev to npm registry"
-        npm config set @bit:registry https://node.bit.dev
-        npm config set @dechea:registry=https://node.bit.dev
-        npm config set @teambit:registry=https://node.bit.dev
-        npm config set //node.bit.dev/:_authToken ${BIT_TOKEN}
-        npm config set //node.bit.cloud/:_authToken ${BIT_TOKEN}
-        echo "Completed adding bit.dev to npm registry"
-      shell: bash
-      env:
-        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
-
     - name: Install Node.js and test
       run: |
         npm install
@@ -255,6 +229,7 @@ runs:
         echo "Test cases run successfully"
       shell: bash
       env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
         FAUNA_CHILD_DB: ${{ inputs.FAUNA_CHILD_DB }}
 
     - name: Install Node.js and run stryker mutation test
@@ -265,6 +240,7 @@ runs:
         echo "Mutated test cases run successfully"
       shell: bash
       env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
         FAUNA_CHILD_DB: ${{ inputs.FAUNA_CHILD_DB }}
 
     - name: Upload coverage files
@@ -280,6 +256,7 @@ runs:
         echo "Successfully created fauna migration"
       shell: bash
       env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
         FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
@@ -290,6 +267,7 @@ runs:
         npm run fauna:state
       shell: bash
       env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
         FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
@@ -301,6 +279,7 @@ runs:
         echo "Successfully applied fauna migration"
       shell: bash
       env:
+        BIT_TOKEN: ${{ inputs.BIT_TOKEN }}
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
         FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
