@@ -285,7 +285,7 @@ runs:
 
     - name: Upload Schema File
       run: |
-        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=merge" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
+        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=replace" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
         echo "Schema uploaded successfully"
       shell: bash
 
