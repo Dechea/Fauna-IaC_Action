@@ -183,20 +183,6 @@ runs:
           ${{ steps.convert_repo_str.outputs.repo_names }}
         path: repos
 
-    - name: Merge GraphQL schema files
-      run: |
-        chmod u+x ${{ github.action_path }}/scripts/merge_schema_files.sh
-        cd repos/${{ steps.convert_github_domains.outputs.domain }}
-        mkdir -p schema
-        IFS="," read -a repoNames <<< ${{ steps.print_repo_names.outputs.repository_names }}
-        for index in "${!repoNames[@]}"
-        do
-            echo "merging schema file for repo : ${repoNames[index]}"
-            cat ${repoNames[index]}/${repoNames[index],,}.gql >> schema/schema.gql
-        done
-        echo "Successfully merge schema files"
-      shell: bash
-
     - name: Merge all test files
       run: |
         ls -lA
@@ -282,12 +268,6 @@ runs:
         FAUNA_ADMIN_KEY: ${{ inputs.FAUNA_TOKEN }}
         FAUNADB_DOMAIN: ${{ steps.get_fauna_urls.outputs.fauna_domain }}
         FAUNA_DATABASE: ${{ inputs.FAUNA_DATABASE }}
-
-    - name: Upload Schema File
-      run: |
-        curl -X POST "https://${{ steps.get_fauna_urls.outputs.fauna_graphql_domain }}/import?mode=replace" -H "authorization:Bearer ${{ inputs.FAUNA_TOKEN }}" --data-binary "@repos/${{ steps.convert_github_domains.outputs.domain }}/schema/schema.gql"
-        echo "Schema uploaded successfully"
-      shell: bash
 
     - name: Commit Fauna migration folder
       uses: EndBug/add-and-commit@v9
